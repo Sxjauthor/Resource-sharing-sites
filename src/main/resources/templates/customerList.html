@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--引入公共head部分-->
+    <th:block th:include="~{common::commonHead}"></th:block>
+    <title>会员管理</title>
+</head>
+<body class="bg-primary-subtle">
+<div class="container-fluid">
+    <button class="btn btn-secondary disabled">用户管理</button>
+    <div class=" py-2 d-flex">
+        <form class="d-flex w-50" method="post" th:action="@{/customer}">
+            <input class="form-control me-2 w-50 border-primary" type="text" placeholder="Search" name="username" th:value="${username}">
+            <select class="form-select me-2 w-25 border-primary" name="status">
+                <option value="0">状态</option>
+                <option value="1" th:selected="${status=='1'?'selected':''}">正常</option>
+                <option value="2" th:selected="${status=='2'?'selected':''}">注销</option>
+                <option value="3" th:selected="${status=='3'?'selected':''}">禁用</option>
+            </select>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+
+<div class="p-2">
+    <table class="table table-hover table-bordered border-primary table-sm">
+        <thead>
+        <tr>
+            <th scope="col"><div class="form-check form-check-inline">
+                <input class="form-check-input border-primary" type="checkbox" id="inlineCheckbox1" value="option1">
+                <label class="form-check-label" for="inlineCheckbox1">全选</label>
+            </div>
+            </th>
+            <th scope="col">用户名</th>
+            <th scope="col">昵称</th>
+            <th scope="col">头像</th>
+            <th scope="col">等级</th>
+            <th scope="col">金币</th>
+            <th scope="col">最近签到</th>
+            <th scope="col">连续签到</th>
+            <th scope="col">今日签到</th>
+            <th scope="col">注册日期</th>
+            <th scope="col">状态</th>
+            <th scope="col">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member:${dataList}">
+            <th scope="row"><div class="form-check form-check-inline">
+                <input class="form-check-input border-primary" type="checkbox" th:id="member${member.id}" th:value="${member.id}">
+            </div></th>
+            <td>[[${member.username}]]</td>
+            <td>[[${member.nick}]]</td>
+            <td>
+                <img class="img-thumbnail" th:src="${application.head}/${member.head}" width="40px">
+            </td>
+            <td>[[${member.level}]]</td>
+            <td>[[${member.gold}]]</td>
+            <td>[[${member.signdate}]]</td>
+            <td>[[${member.concount}]]</td>
+            <td>[[${member.signflag==1?'已签到':''}]]</td>
+            <td>[[${member.joindate}]]</td>
+            <td class="statusTD" th:if="${member.status==1?'正常':''}"></td>
+            <td class="statusTD" th:if="${member.status==2?'注销':''}"></td>
+            <td class="statusTD" th:if="${member.status==3?'禁用':''}"></td>
+            <td>
+                <button th:id="ban${member.id}" th:name="${member.id}" th:class="btn btn-outline-danger ${member.status==1?'':'d-none'}">禁用</button>
+                <button th:id="recover${member.id}" th:name="${member.id}" th:class="btn btn-outline-success ${member.status==3?'':'d-none'}">恢复</button>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li th:if="${page.currentPage>1}" class="page-item"><a class="page-link" th:href="@{/customer(username=${username},status=${status})}">首页</a></li>
+        <li th:if="${page.currentPage>1}" class="page-item"><a class="page-link" th:href="@{/customer(cur=${page.currentPage}-1,username=${username},status=${status})}">上一页</a></li>
+
+        <li th:each="i:${#numbers.sequence(${page.SPage},${page.EPage})}" th:class="page-item ${i==page.currentPage?'active':''}"><a class="page-link" th:href="@{/customer(cur=${i},username=${username},status=${status})}">[[${i}]]</a></li>
+
+        <li th:if="${page.currentPage<page.totalPages}" class="page-item"><a class="page-link" th:href="@{/customer(cur=${page.currentPage+1},username=${username},status=${status})}">下一页</a></li>
+        <li th:if="${page.currentPage<page.totalPages}" class="page-item"><a class="page-link" th:href="@{/customer(cur=${page.totalPages},username=${username},status=${status})}">尾页</a></li>
+
+        <li class="page-item"><a class="page-link">[[${requestScope.page.currentPage}/${requestScope.page.totalPages}]]</a></li>
+    </ul>
+</nav>
+<!--toast-->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img th:src="@{/img/favicon.ico}" width="20px" class="rounded me-2" alt="...">
+            <strong class="me-auto">会员管理</strong>
+            <small>刚刚</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">[[${requestScope.msg}]]</div>
+    </div>
+</div>
+</body>
+<script>
+    $(function(){
+        let text=$(".toast-body").text();
+        if(text!=null&&text.length>0){
+            let toastLiveExample = document.getElementById('liveToast')
+            let toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        }
+    })
+    $(document).on("click","button[id^=ban]",function (){
+        let id = $(this).prop("name");
+        window.location.href="${pageContext.request.contextPath}/customer?act=ban&id="+id;
+    })
+    $(document).on("click","button[id^=recover]",function (){
+        let id = $(this).prop("name");
+        window.location.href="${pageContext.request.contextPath}/customer?act=recover&id="+id;
+    })
+    $(function (){
+        $(".statusTD").each(function (){
+            let text = $(this).text();
+            if(text=='注销'){
+                $(this).parent().attr("style","background-color: #adb5bd")
+            }
+        })
+    })
+    $("#inlineCheckbox1").change(function (){
+        let prop=$("#inlineCheckbox1").prop("checked")
+        if(prop){
+            let $checkbox = $(":checkbox[id^=member]");
+            $checkbox.each(function (){
+                $(this).prop("checked",true);
+            })
+        }else{
+            let $checkbox = $(":checkbox[id^=member]");
+            $checkbox.each(function (){
+                $(this).prop("checked",false);
+            })
+        }
+    })
+</script>
+</html>

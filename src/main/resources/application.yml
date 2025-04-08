@@ -2,3 +2,12 @@ server:
   port: 8080
   servlet:
     context-path: /ex
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/j10jb2?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: sjjqwe123...
+  messages:
+    basename: j10
+mybatis-plus:
+  type-aliases-package: 'com.j10.exercise.bean'

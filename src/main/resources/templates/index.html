@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--引入公共head部分-->
+    <th:block th:include="~{common::commonHead}"></th:block>
+    <title>首页</title>
+    <style>
+        .h-20{height: 20%;}
+        .fs-9{font-size: 0.9em;}
+        .w-2x{width: 24%; transition: all 0.3s;}
+        .h-200{height: 160px;}
+    </style>
+</head>
+<body>
+<!-- 第一部分 导航栏 -->
+<div th:replace="~{common::memberNav}"></div>
+
+<!-- 第二部分  左图片轮播  右通知公告 -->
+<div class="container-fluid d-flex justify-content-between mt-2">
+    <div class="border border-2 p-2 rounded shadow" style="width: 65%;">
+        <div class="d-flex justify-content-between mb-2">
+            <div><button class="btn btn-secondary disabled">热门壁纸</button></div>
+            <div><a class="text-muted btn btn-secondary" th:href="@{/resDetail(act='moreW')}">more</a></div>
+        </div>
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="4000">
+                    <img th:src="@{/img/1.jpg}" class="d-block w-100 rounded" alt="...">
+                </div>
+                <div class="carousel-item" data-bs-interval="4000">
+                    <img th:src="@{/img/2.jpg}" class="d-block w-100 rounded" alt="...">
+                </div>
+                <div class="carousel-item" data-bs-interval="4000">
+                    <img th:src="@{/img/3.jpg}" class="d-block w-100 rounded" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    <div class="border border-1 p-2 rounded shadow" style="width: 34%;">
+        <div class="d-flex justify-content-between mb-2">
+            <div><button class="btn btn-secondary disabled">通知公告</button></div>
+            <div><a class="text-muted btn btn-secondary" th:href="@{/noticeMem(act='noticeList')}">more</a></div>
+        </div>
+        <div class="d-flex flex-column" style="height: 536px;" id="noticeDiv"></div>
+    </div>
+</div>
+
+<!-- 第三部分 具体内容 -->
+<!--实用软件-->
+<div class="container-fluid p-5" id="soft">
+    <!-- 标题 -->
+    <div style="height: 38px;">
+        <div class="float-start">
+            <span class="fs-4">实用软件</span>
+            <span class="text-muted fs-9">用好方法与工具，是高效完成事情的有效途径！💉</span>
+        </div>
+        <div class="float-end d-flex">
+            <a class="d-block ms-3 text-decoration-none btn bg-success-subtle rounded-pill" id="a1"></a>
+            <a class="d-block ms-3 text-decoration-none btn bg-success-subtle rounded-pill" id="a2"></a>
+            <a class="d-block ms-3 text-decoration-none btn bg-success-subtle rounded-pill" id="a3"></a>
+        </div>
+    </div>
+    <!-- 列举部分-->
+    <div class="mt-2 d-flex flex-wrap justify-content-between align-content-between" id="con1">
+    </div>
+</div>
+<!--热门资料-->
+<div class="container-fluid p-5 pt-0" id="doc">
+    <!-- 标题 -->
+    <div style="height: 38px;">
+        <div class="float-start">
+            <span class="fs-4">热门资料</span>
+            <span class="text-muted fs-9">热门资料汇聚，轻松掌握前沿动态与实用干货！☺</span>
+        </div>
+    </div>
+    <!-- 列举部分-->
+    <div class="mt-2 d-flex flex-wrap justify-content-between align-content-between" id="con2">
+    </div>
+</div>
+<!--壁纸-->
+<div class="container-fluid p-5 pt-0" id="wall">
+    <!-- 标题 -->
+    <div style="height: 38px;">
+        <div class="float-start">
+            <span class="fs-4">壁纸</span>
+            <span class="text-muted fs-9">精美壁纸，装点数字世界，让目光停留成享受！❀</span>
+        </div>
+    </div>
+    <!-- 列举部分-->
+    <div class="mt-2 d-flex flex-wrap justify-content-between align-content-between" id="con3">
+    </div>
+</div>
+
+<!-- 最下面的底部-->
+<div th:replace="~{common::memberFoot}"></div>
+
+<!-- Modal -->
+<div class="modal fade" id="shareModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="shareModalLabel">分享上传</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body container">
+                <form id="shareForm" method="post" th:action="@{/resDetail(act=upload)}" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <label for="res" class="form-label">上传资源</label>
+                            <input type="file" class="form-control" id="res" name="res">
+                        </div>
+                        <div class="col-md-5">
+                            <label for="type" class="form-label">资源类型</label>
+                            <select id="type" class="form-select" name="type">
+                                <option value="11">壁纸-风景</option>
+                                <option value="12">壁纸-美女</option>
+                                <option value="13">壁纸-设计</option>
+                                <option value="14">壁纸-军事</option>
+                                <option value="2">软件</option>
+                                <option value="3">资料</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="type" class="form-label">描述</label>
+                            <input class="form-control" id="display" name="display" type="text" maxlength="18">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-7" id="th">
+                            <label for="img" class="form-label">缩略图</label>
+                            <input type="file" class="form-control" id="img" name="img">
+                        </div>
+                        <div class="col-md-5">
+                            <label for="gold" class="form-label">金币</label>
+                            <input type="text" class="form-control" id="gold" name="gold" value="0">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="shareBtn" disabled>上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--toast-->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img th:src="@{/img/favicon.ico}" width="20px" class="rounded me-2" alt="...">
+            <strong class="me-auto">首页</strong>
+            <small>刚刚</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" th:if="${msg}" th:text="${msg}"></div>
+        <div class="toast-body" th:if="${m==0}" th:text="签到成功"></div>
+        <div class="toast-body" th:if="${m==1}" th:text="今日已签"></div>
+    </div>
+</div>
+<script>
+    $("#lan").change(function (){
+        $("#formLan").submit();
+    })
+
+    $("#shareBtn").click(function (){
+        $("#shareForm").submit();
+    })
+
+    let b1=false;
+    let b2=true;
+    let b3=false;
+    let b4=false;
+    let b5=true;
+    $("#gold").blur(function (){
+        let val3 = $("#gold").val();
+        if(val3!=null&&val3.trim().length>0){
+            b5=true;
+            check();
+        }else{
+            b5=false;
+            check();
+        }
+    })
+
+    $("#res").change(function (){
+        let val = this.files[0];
+        b1=true;
+        check()
+    })
+
+    $("#type").change(function (){
+        let val1 = $("#type").val();
+        if(val1!=null){
+            b2=true;
+            check();
+        }else{
+            b2=false;
+            check();
+        }
+    })
+
+    $("#display").blur(function (){
+        let val2 = $("#display").val();
+        if(val2!=null&&val2.trim().length>0){
+            b3=true;
+            check();
+        }else{
+            b3=false;
+            check();
+        }
+    })
+
+    $("#img").change(function (){
+        let val = this.files[0];
+        b4=true;
+        check()
+    })
+
+    function check(){
+        console.log(b1+"1")
+        console.log(b2+"2")
+        console.log(b3+"3")
+        console.log(b4+"4")
+        console.log(b5+"5")
+        if(b1&&b2&&b3&&b4&&b5){
+            $("#shareBtn").prop("disabled",false);
+        }else{
+            $("#shareBtn").prop("disabled",true);
+        }
+    }
+
+    $("#searchBtn").click(function (e){
+        let val = $("#search").val();
+        if(val==null||val.trim().length==0){
+            e.preventDefault();
+        }
+    })
+
+    $(function(){
+        let text=$(".toast-body").text();
+        if(text!=null&&text.length>0){
+            let toastLiveExample = document.getElementById('liveToast')
+            let toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        }
+    })
+
+
+    $(function (){
+        $.ajax({
+            url:'/ex/noticeMember',
+            type:'post',
+            data:'act=selectAll',
+            dataType:'json',
+            success:function (ns){
+                for (let i = 0; i < ns.length; i++) {
+                    let notice =ns[i];
+                    let $div=$(`<div class="h-20 bg-primary-subtle rounded p-2 border-bottom border-warning border-2"></div>`);
+                    let $p=$("<p class='text-white'></p>");
+                    let $span=$("<span class='text-warning fs-3'></span>")
+                    let day=notice.day
+                    let ym=notice.ym
+                    $span.append(day)
+                    $p.append($span).append(ym)
+                    let $a=$(`<a class="text-white text-decoration-none" th:href=""></a>`);
+                    let id=notice.id;
+                    let href="@{/noticeMem(act=detail,id="+id+")}";
+                    $a.attr("th:href",href);
+                    $a.text(notice.title)
+                    $div.append($p).append($a);
+                    $("#noticeDiv").append($div);
+                }
+            }
+        })
+    })
+
+    //使用事件委托来解决动态生成内容的事件绑定问题
+    // 动态生成的对象,事件绑定到根目录上可以确保其正确绑定事件
+    $(document).on('mouseenter','.w-2x',function (){
+        $(this).addClass("shadow");
+    }).on('mouseleave','.w-2x',function (){
+        $(this).removeClass("shadow");
+    })
+
+    $(".myfoot a").hover(function(){
+        $(this).removeClass("text-muted").addClass("text-warning");
+    },function(){
+        $(this).removeClass("text-warning").addClass("text-muted");;
+    })
+
+    $("#logoutBtn").click(function (e){
+        let b = confirm("确定要退出吗?");
+        if(!b){
+            e.preventDefault();
+        }
+    })
+
+    $("#personalInfoBtn").click(function (){
+        window.location.href="/ex/member?act=updateSession";
+    })
+
+    $(function (){
+        $.ajax({
+            url:'/ex/resload',
+            type:'post',
+            data:'act=r2',
+            dataType:'json',
+            success:function (list){
+                for (let i = 0; i < list.length; i++) {
+                    let res=list[i];
+                    let href="/ex/resDetail?act=detail2&id="+res.id;
+                    if(i==0){
+                        $("#a1").text(res.resname).prop("href",href)
+                    }else if(i==1){
+                        $("#a2").text(res.resname).prop("href",href)
+                    }else if(i==2){
+                        $("#a3").text(res.resname).prop("href",href)
+                    }
+                    let container = $("#con1");
+                    let a = $(`<a class="d-block w-2x text-decoration-none h-200  mb-3 border rounded p-2"></a>`);
+                    a.prop("href",href);
+                    let c1 = $(`<div class="d-flex"></div>`);
+                    let c11 = $(`<div></div>`);
+                    let img = $(`<img th:src="" width="54px" height="54px" class="border rounded"/>`);
+                    let src="${application.icon}"+res.thumbnail
+                    img.prop("th:src",src);
+                    c11.append(img);
+                    c1.append(c11);
+                    let c12 = $(`<div class="ms-2 text-muted fs-9"></div>`);
+                    let name=res.resname;
+                    c12.text(name);
+                    let br=$(`<br/>`)
+                    c12.append(br)
+                    let button1=$(`<button class="btn-sm bg-success-subtle disabled fs-9 text-muted border-0 rounded"></button>`)
+                    let free=res.isFree;
+                    if(free==0){
+                        button1.text("免费")
+                    }else{
+                        button1.text(free+"金币");
+                    }
+                    c12.append(button1)
+                    c1.append(c12)
+                    a.append(c1)
+                    let p=$(`<p class="text-muted fs-9 my-3"></p>`)
+                    p.text(res.display)
+                    a.append(p)
+                    let c2=$(`<div class="d-flex justify-content-between"></div>`)
+                    let c21=$(`<div></div>`)
+                    let span1=$(`<span class="fs-9 text-muted"></span>`)
+                    let svg1=$(`<img th:src="@{/img/calendar.svg}"/>`)
+                    span1.append(svg1)
+                    let date=String(res.joindate)
+                    span1.append(date.substring(5,10))
+                    c21.append(span1)
+                    let span2=$(`<span class="ms-2 fs-9 text-muted"></span>`)
+                    let svg2=$(`<img th:src="@{/img/look.svg}"/>`)
+                    span2.append(svg2)
+                    span2.append(res.pv)
+                    c21.append(span2)
+                    c2.append(c21)
+                    let c22=$(`<div></div>`)
+                    let button2=$(`<a class="btn btn-sm btn-outline-success rounded-pill">获取</a>`)
+                    let getId="get"+res.id;
+                    let href1="@{/resDetail(act=downloadS,id="+res.id+")}";
+                    button2.prop("th:href",href1).prop("id",getId).prop("name",free);
+                    c22.append(button2)
+                    c2.append(c22)
+                    a.append(c2)
+                    container.append(a);
+                }
+            }
+        })
+    })
+
+    $(function (){
+        $.ajax({
+            url:'/ex/resload',
+            type:'post',
+            data:'act=r3',
+            dataType:'json',
+            success:function (list){
+                for (let i = 0; i < list.length; i++) {
+                    let res=list[i];
+                    let container = $("#con2");
+                    let a = $(`<a class="d-block w-2x text-decoration-none h-200  mb-3 border rounded p-2"></a>`);
+                    let href="@{/resDetail(act=detail3,id="+res.id+")}";
+                    a.prop("th:href",href);
+                    let c1 = $(`<div class="d-flex"></div>`);
+                    let c11 = $(`<div></div>`);
+                    let img = $(`<img th:src="" width="54px" height="54px" class="border rounded"/>`);
+                    let src="${application.icon}"+res.thumbnail
+                    img.prop("th:src",src);
+                    c11.append(img);
+                    c1.append(c11);
+                    let c12 = $(`<div class="ms-2 text-muted fs-9"></div>`);
+                    let name=res.resname;
+                    c12.text(name);
+                    let br=$(`<br/>`)
+                    c12.append(br)
+                    let button1=$(`<button class="btn-sm bg-success-subtle disabled fs-9 text-muted border-0 rounded"></button>`)
+                    let free=res.isFree;
+                    if(free==0){
+                        button1.text("免费")
+                    }else{
+                        button1.text(free+"金币");
+                    }
+                    c12.append(button1)
+                    c1.append(c12)
+                    a.append(c1)
+                    let p=$(`<p class="text-muted fs-9 my-3"></p>`)
+                    p.text(res.display)
+                    a.append(p)
+                    let c2=$(`<div class="d-flex justify-content-between"></div>`)
+                    let c21=$(`<div></div>`)
+                    let span1=$(`<span class="fs-9 text-muted"></span>`)
+                    let svg1=$(`<img th:src="@{/img/calendar.svg}"/>`)
+                    span1.append(svg1)
+                    let date=String(res.joindate)
+                    span1.append(date.substring(5,10))
+                    c21.append(span1)
+                    let span2=$(`<span class="ms-2 fs-9 text-muted"></span>`)
+                    let svg2=$(`<img th:src="@{/img/look.svg}"/>`)
+                    span2.append(svg2)
+                    span2.append(res.pv)
+                    c21.append(span2)
+                    c2.append(c21)
+                    let c22=$(`<div></div>`)
+                    let button2=$(`<a class="btn btn-sm btn-outline-success rounded-pill">获取</a>`)
+                    let getId="get"+res.id;
+                    let href1="@{/resDetail(act=downloadD,id="+res.id+")}";
+                    button2.prop("th:href",href1).prop("id",getId).prop("name",free);
+                    c22.append(button2)
+                    c2.append(c22)
+                    a.append(c2)
+                    container.append(a);
+                }
+            }
+        })
+    })
+
+    $(function (){
+        $.ajax({
+            url:'/ex/resload',
+            type:'post',
+            data:'act=r1',
+            dataType:'json',
+            success:function (list){
+                for (let i = 0; i < list.length; i++) {
+                    let res=list[i];
+                    let container = $("#con3");
+                    let a = $(`<a class="d-block w-2x text-decoration-none h-200  mb-3 border rounded p-2"></a>`);
+                    let href="@{/resDetail?(act=detail1,id="+res.id+")}";
+                    a.prop("th:href",href);
+                    let c1 = $(`<div class="d-flex"></div>`);
+                    let c11 = $(`<div></div>`);
+                    let img = $(`<img th:src="" width="100px" height="54px" class="border rounded"/>`);
+                    let src="${application.img}"+res.thumbnail
+                    img.prop("th:src",src);
+                    c11.append(img);
+                    c1.append(c11);
+                    let c12 = $(`<div class="ms-2 text-muted fs-9"></div>`);
+                    let name=res.resname;
+                    c12.text(name);
+                    let br=$(`<br/>`)
+                    c12.append(br)
+                    let button1=$(`<button class="btn-sm bg-success-subtle disabled fs-9 text-muted border-0 rounded"></button>`)
+                    let free=res.isFree;
+                    if(free==0){
+                        button1.text("免费")
+                    }else{
+                        button1.text(free+"金币");
+                    }
+                    c12.append(button1)
+                    c1.append(c12)
+                    a.append(c1)
+                    let p=$(`<p class="text-muted fs-9 my-3"></p>`)
+                    p.text(res.display)
+                    a.append(p)
+                    let c2=$(`<div class="d-flex justify-content-between"></div>`)
+                    let c21=$(`<div></div>`)
+                    let span1=$(`<span class="fs-9 text-muted"></span>`)
+                    let svg1=$(`<img th:src="@{/img/calendar.svg}"/>`)
+                    span1.append(svg1)
+                    let date=String(res.joindate)
+                    span1.append(date.substring(5,10))
+                    c21.append(span1)
+                    let span2=$(`<span class="ms-2 fs-9 text-muted"></span>`)
+                    let svg2=$(`<img th:src="@{/img/look.svg}"/>`)
+                    span2.append(svg2)
+                    span2.append(res.pv)
+                    c21.append(span2)
+                    c2.append(c21)
+                    let c22=$(`<div></div>`)
+                    let button2=$(`<a class="btn btn-sm btn-outline-success rounded-pill">获取</a>`)
+                    let getId="get"+res.id;
+                    let href1="@{/resDetail(act=downloadW,id="+res.id+")}";
+                    button2.prop("th:href",href1).prop("id",getId).prop("name",free);
+                    c22.append(button2)
+                    c2.append(c22)
+                    a.append(c2)
+                    container.append(a);
+                }
+            }
+        })
+    })
+    $(document).on("click","a[id^=get]",function (e){
+        let gold =Number("${session.member.gold}") ;
+        console.log("gold=="+gold)
+        let isFree = Number($(this).prop("name"));
+        console.log("isFree=="+isFree)
+        if(gold<isFree){
+            alert("金币不足,无法下载");
+            e.preventDefault();
+        }
+    })
+</script>
+</body>
+</html>

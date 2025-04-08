@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--引入公共head部分-->
+    <th:block th:include="~{common::commonHead}"></th:block>
+    <title>注册</title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4 pt-5">
+            <!-- 简单的进行注册, 更多账号细节,可以放置在 修改(完善)个人资料里面 -->
+            <form th:action="@{/register}" method="POST">
+                <h2 class="text-center text-dark mb-3">欢迎注册美图分享网站会员账号</h2>
+                <div class="form-group mb-2">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" aria-describedby="usernameHelp">
+                    <small id="usernameHelp" class="form-text text-muted">4~8位,大小写字母和数字的组合</small>
+                </div>
+                <div class="form-group mb-2">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp">
+                    <small id="passwordHelp" class="form-text text-muted">3~6位,大小写字母和数字的组合</small>
+                </div>
+                <div class="form-group mb-2">
+                    <label for="repassword">RePassword</label>
+                    <input type="password" class="form-control" id="repassword" name="repassword" aria-describedby="repasswordHelp">
+                    <small id="repasswordHelp" class="form-text text-muted">重复密码</small>
+                </div>
+                <div class="form-group mb-2">
+                    <label for="nick">Nick</label>
+                    <input type="text" class="form-control" id="nick" name="nick" aria-describedby="nickHelp">
+                    <small id="nickHelp" class="form-text text-muted">中文或英文</small>
+                </div>
+                <div class="form-group form-check mb-2">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1" disabled>
+                    <label class="form-check-label" for="exampleCheck1">
+                        <!-- 要么用新页面 要么使用模态框 -->
+                        已阅读<a id="showAgreement" th:href="@{/}" data-bs-toggle="modal" data-bs-target="#staticBackdrop">网站账号使用约定</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary" id="register" disabled>Register</button>
+                <a th:href="@{/login.html}" class="btn btn-success">Back Login</a>
+                <a th:href="@{/index.html}" class="btn btn-warning">Back Index</a>
+            </form>
+        </div>
+        <div class="col-4"></div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">网站账号使用约定</h1>
+            </div>
+            <div class="modal-body">
+                <p>欢迎使用美图下载分享网站（以下简称“本平台”）。在使用本平台前，请仔细阅读本协议。您使用本平台的行为即视为同意并遵守本协议所有条款。</p>
+
+                <h6>一、用户注册与账号管理</h6>
+                <p>1. 用户需按照平台要求提供真实有效的注册信息，并妥善保管账号及密码，不得转让或出借账号。</p>
+                <p>2. 若账号出现异常，用户应立即通知平台并采取必要措施。因用户自身原因导致账号被盗或信息泄露的，平台不承担任何责任。</p>
+
+                <h6>二、用户行为规范</h6>
+                <p>1. <b>内容使用</b>：用户仅可在个人学习、欣赏等非商业用途下使用本平台提供的美图资源。未经平台书面许可，禁止将图片用于商业广告、出版、印刷、销售等盈利性活动。</p>
+                <p>2. <b>签到与金币</b>：会员通过签到等方式获得金币，金币可用于兑换图片或享受平台服务。金币的获取与使用需遵守平台规则，不得通过非法手段获取金币。</p>
+                <p>3. <b>升级与权益</b>：会员根据平台规则升级，不同等级会员享有相应权益。会员应遵守平台规定，不得通过不正当手段提升等级。</p>
+
+                <h6>三、内容管理与版权</h6>
+                <p>1. 本平台提供的美图资源均为合法授权或原创内容，用户需尊重版权，不得对图片进行篡改、二次创作或未经授权的传播。</p>
+                <p>2. 若用户发现平台内容存在侵权问题，可及时联系平台进行处理。</p>
+
+                <h6>四、平台责任与免责</h6>
+                <p>1. 平台将尽力保障服务的稳定性与安全性，但因不可抗力、网络故障、系统维护等原因导致服务中断或数据丢失的，平台不承担赔偿责任。</p>
+                <p>2. 用户因违反本协议或相关法律法规而引发的纠纷，由用户自行承担责任，平台不承担连带责任。</p>
+
+                <h6>五、协议的变更与终止</h6>
+                <p>1. 平台有权根据实际情况对本协议进行修改或补充，修改后的协议将在平台公布并生效。</p>
+                <p>2. 用户如不同意修改后的协议，可停止使用平台服务。用户继续使用平台服务的，视为接受修改后的协议。</p>
+                <p>3. 平台有权在用户违反本协议或法律法规时终止服务，并保留追究用户责任的权利。</p>
+
+                <h6>六、其他</h6>
+                <p>1. 本协议的解释权归平台所有。</p>
+                <p>2. 用户在使用平台过程中如有疑问或建议，可通过平台客服渠道进行反馈。</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="understood" data-bs-dismiss="modal">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--toast-->
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img th:src="@{/img/favicon.ico}" width="20px" class="rounded me-2" alt="...">
+            <strong class="me-auto">注册</strong>
+            <small>刚刚</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">[[${msg}]]</div>
+    </div>
+</div>
+</body>
+<script>
+    $(function (){
+        let msg=$(".toast-body").text()
+        if(msg!=null&&msg.length>0){
+            let toastLiveExample = document.getElementById("liveToast");
+            let toast = new bootstrap.Toast(toastLiveExample);
+            toast.show()
+        }
+    })
+
+    let b1=false;
+    let b2=false;
+    let b3=false;
+    let b4=false;
+    let b5=false;
+
+    function registerBtn(){
+        if(b1&&b2&&b3&&b4&&b5){
+            $("#register").removeAttr("disabled")
+        }else{
+            $("#register").attr("disabled","disabled")
+        }
+    }
+
+    $("#username").focus(function (){
+        $("#usernameHelp").text("4~8位,大小写字母和数字的组合")
+    })
+
+    $("#username").blur(function (){
+        let regExp = /^[0-9a-z]{4,8}$/i;
+        let username=$("#username").val()
+        if(!regExp.test(username)){
+            $("#username").removeClass("is-valid").addClass("is-invalid")
+            b1=false;
+            $("#usernameHelp").text("格式不正确")
+        }else{
+            $.ajax({
+                url:'/ex/register?username='+username,
+                type:'get',
+                dataType:'text',
+                async:false, //同步，需要等到结果才能确定b1的值
+                success:function (b){
+                    if(b=="true"){
+                        $("#username").removeClass("is-valid").addClass("is-invalid")
+                        b1=false;
+                        $("#usernameHelp").text("格式正确，但已存在")
+                    }else{
+                        $("#username").removeClass("is-invalid").addClass("is-valid");
+                        b1=true;
+                        $("#usernameHelp").text("格式正确且可用")
+                    }
+                }
+            })
+        }
+        registerBtn()
+    })
+
+    $("#password").blur(function (){
+        let regExp = /^[0-9a-z]{3,6}$/i;
+        let password=$("#password").val()
+        if(!regExp.test(password)){
+            $("#password").removeClass("is-valid").addClass("is-invalid")
+            b2=false;
+        }else{
+            $("#password").removeClass("is-invalid").addClass("is-valid");
+            b2=true;
+        }
+        registerBtn()
+    })
+    $("#repassword").blur(function (){
+        let password=$("#password").val()
+        let repassword=$("#repassword").val()
+        let regExp = /^[0-9a-z]{3,6}$/i;
+        // 用==比较  不能用equals
+        if(regExp.test(repassword)&&repassword==password){
+            $("#repassword").removeClass("is-invalid").addClass("is-valid")
+            b3=true;
+        }else{
+            $("#repassword").removeClass("is-valid").addClass("is-invalid");
+            b3=false;
+        }
+        registerBtn()
+    })
+    $("#nick").blur(function (){
+        let nick=$("#nick").val()
+        let regExp = /[a-z]+|[\u4e00-\u9fa5]+/i;
+        if(regExp.test(nick)){
+            $("#nick").removeClass("is-invalid").addClass("is-valid")
+            b4=true;
+        }else{
+            $("#nick").removeClass("is-valid").addClass("is-invalid");
+            b4=false;
+        }
+        registerBtn()
+    })
+    $("#understood").click(function (){
+        $("#exampleCheck1").removeAttr("disabled").attr("checked","checked")
+        b5=true;
+        registerBtn()
+    })
+</script>
+</html>

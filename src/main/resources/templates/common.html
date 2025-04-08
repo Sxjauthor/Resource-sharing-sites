@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>页面公共部分</title>
+</head>
+<body>
+<!--公共head标签内容-->
+<div th:fragment="commonHead">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/img/favicon.ico}" rel="icon" sizes="any" />
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+</div>
+
+<!--会员界面 导航栏-->
+<nav class="navbar sticky-top navbar-expand-lg bg-warning" th:fragment="memberNav">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/index.html}">
+            <img th:src="@{/img/logo.png}"/>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-2 mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#soft" th:text="#{UtilitySoftware}"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#doc" th:text="#{HotMaterial}"></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#wall" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{Wallpaper}"></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/resDetail(act='search',type=1,search='风景')}" th:text="#{scenery}"></a></li>
+                        <li><a class="dropdown-item" th:href="@{/resDetail(act='search',type=1,search='美女')}" th:text="#{beauty}"></a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" th:href="@{/resDetail(act='search',type=1,search='设计')}" th:text="#{design}"></a></li>
+                        <li><a class="dropdown-item" th:href="@{/resDetail(act='search',type=1,search='军事')}" th:text="#{military}"></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <form th:action="@{/(lan='en_US')}" method="post" id="formLan">
+                        <select id="lan" class="form-select" name="lan">
+                            <option th:selected="${locale=='zh_CN'?'selected':''}" value="zh_CN">中文</option>
+                            <option th:selected="${locale=='en_US'?'selected':''}" value="en_US">English</option>
+                            <option th:selected="${locale=='ko_KR'?'selected':''}" value="ko_KR">한글</option>
+                            <option th:selected="${locale=='fr_FR'?'selected':''}" value="fr_FR">En français</option>
+                        </select>
+                    </form>
+                </li>
+            </ul>
+            <form class="d-flex me-auto" role="search" method="post" th:action="@{/resDetail(act='search')}">
+                <input class="form-control me-2" size="25" type="search" placeholder="Search" aria-label="Search" name="search" id="search">
+                <button class="btn btn-success" type="submit" id="searchBtn" th:text="#{Search}"></button>
+            </form>
+            <!-- 登录/个人中心 2选1 -->
+            <a th:if="${session.member==null}" th:href="@{/login.html}" class="btn btn-success" th:text="#{Login}"></a>
+
+            <div class="btn-group" th:if="${session.member!=null}">
+                <img style="cursor: pointer;" th:src="${head}/${session.member.head}"
+                     class="dropdown-toggle rounded" data-bs-toggle="dropdown" aria-expanded="false" width="40px"/>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><button class="dropdown-item" type="button" disabled>会员-[[${sessionScope.member.nick}]]</button></li>
+                    <li th:if="${session.member.signflag==0}"><a class="dropdown-item" type="button" th:href="@{/member(act='sign')}">签到</a></li>
+                    <li th:if="${session.member.signflag==1}"><a class="dropdown-item disabled" type="button">已签到</a></li>
+                    <li><a class="dropdown-item disabled" type="button">金币:[[${sessionScope.member.gold}]]</a></li>
+                    <li><button class="dropdown-item" type="button" id="personalInfoBtn">个人资料</button></li>
+                    <li><button class="dropdown-item" type="button" id="share" data-bs-toggle="modal" data-bs-target="#shareModal">分享上传</button></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" type="button" th:href="@{/login}" id="logoutBtn">安全退出</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!--会员界面 底部-->
+<div class="container-fluid bg-dark-subtle myfoot" th:fragment="memberFoot">
+    <div class="container py-2 fs-9 text-muted">
+        Copyright &copy; 2017-2023 J10的网站 &trade;
+        <a th:href="@{/}" class="fs-9 text-muted text-decoration-none ms-2">
+            隐私权声明
+        </a>
+        <a th:href="@{/}" class="fs-9 text-muted text-decoration-none ms-2">
+            版权声明
+        </a>
+        <a th:href="@{/}" class="fs-9 text-muted text-decoration-none ms-2">
+            素材使用协议
+        </a>
+        <a th:href="@{/}" class="fs-9 text-muted text-decoration-none ms-2">
+            联系我们
+        </a>
+        <a th:href="@{/}" class="fs-9 text-muted text-decoration-none ms-2">
+            公告
+        </a>
+        <a th:href="@{/}" class="d-block float-end fs-9 text-muted text-decoration-none">豫ICP备12009440号</a>
+    </div>
+    <hr class="border border-light my-1"/>
+    <div class="container  py-2 fs-9">
+    <span class="text-muted fs-9"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+  <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+  <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+</svg> 友情链接</span>
+        <a th:href="@{/}" class="fs-9 text-muted text-decoration-none ms-2">
+            隐私权声明
+        </a>
+        <a th:href="@{/}" class="fs-9 text-muted text-decoration-none ms-2">
+            版权声明
+        </a>
+        <a th:href="@{/}" class="fs-9 text-muted text-decoration-none ms-2">
+            素材使用协议
+        </a>
+        <a th:href="@{/}" class="fs-9 text-muted text-decoration-none ms-2">
+            联系我们
+        </a>
+        <a th:href="@{/}" class="fs-9 text-muted text-decoration-none ms-2">
+            公告
+        </a>
+    </div>
+</div>
+</body>
+</html>
