@@ -3,7 +3,6 @@ package com.j10.exercise.controller;
 import com.j10.exercise.bean.Manager;
 import com.j10.exercise.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

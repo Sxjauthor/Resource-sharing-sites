@@ -71,7 +71,7 @@
         <li th:if="${page.currentPage<page.totalPages}" class="page-item"><a class="page-link" th:href="@{/res/img(cur=${page.currentPage+1},content=${content},status=${status},id=${id})}">下一页</a></li>
         <li th:if="${page.currentPage<page.totalPages}" class="page-item"><a class="page-link" th:href="@{/res/img(cur=${page.totalPages},content=${content},status=${status},id=${id})}">尾页</a></li>
 
-        <li class="page-item"><a class="page-link" th:text="${requestScope.page.currentPage}/${requestScope.page.totalPages}"></a></li>
+        <li class="page-item"><a class="page-link" th:text="${page.currentPage}/${page.totalPages}"></a></li>
     </ul>
 </nav>
 <!--toast-->

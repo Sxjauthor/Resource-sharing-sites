@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="col-3 pt-5 mt-5">
-            <form method="POST" id="loginform">
+            <form method="POST" id="loginform" th:action="@{/login}">
                 <h2 class="text-center text-light">欢迎登录</h2>
                 <div class="form-group mb-2">
                     <label for="username" class="text-white">用户名</label>
@@ -138,8 +138,8 @@
 
     $("#Check2").change(function (){
         //这里不能用attr 用attr取出来是undefined
-        let c=$("#Check2").is(':checked')
-        console.log(c)
+        let c=$("#Check2").prop("checked")
+        console.log("c=>"+c)
         if(c){
             $("#loginform").attr("action","/ex/login2")
         }else{
@@ -154,7 +154,6 @@
             async:'false',
             dataType:'text',
             success:function (cookie){
-                console.log(cookie)
                 if(cookie!=""&&cookie.length>0){
                     $("#username").prop("value",cookie);
                 }else{

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--引入公共head部分-->
+    <th:block th:include="~{common::commonHead}"></th:block>
+    <title>公告详情</title>
+    <style>
+        body{
+            background-color: #F6F6F6;
+        }
+        #back{
+            height:45px;
+        }
+        a{
+            text-decoration: none;
+            color:#6B6B6B;
+            line-height: 45px;
+        }
+        a:hover{
+            color:#FFC107;
+        }
+        #con{
+            width:80%;
+            align-items: center;
+            background-color: white;
+        }
+        .h-20{height: 20%;}
+        .fs-9{font-size: 0.9em;}
+        .w-2x{width: 24%; transition: all 0.3s;}
+        .h-200{height: 160px;}
+    </style>
+</head>
+<body>
+<!-- 第一部分 导航栏 -->
+<div th:replace="~{common::memberNav}"></div>
+
+<!-- 第二部分 公告 -->
+<div id="back">
+    <a href="javascript:window.history.back()" class="fs-5">>>>返回</a>
+</div>
+<div class="container-fluid p-3 mb-4" id="con">
+    <div class="row">
+        <p class="text-center fw-bold fs-3 m-0 p-2">[[${notice.title}]]</p>
+    </div>
+    <hr class="bg-dark-subtle">
+    <div class="row m-2">
+        <p class="text-center fs-6 fst-italic m-0 p-0">作者:[[${notice.cusername}]]</p>
+    </div>
+    <div class="row m-3">
+        <p class="text-center fs-5 m-0 p-0">[[${notice.content}]]</p>
+    </div>
+    <div class="row">
+        <p class="text-center fs-6 p-3">发布日期:[[${notice.publishtime}]]&nbsp;&nbsp;&nbsp;
+            阅读量:[[${notice.look}]]</p>
+    </div>
+</div>
+
+<!-- 最下面的底部-->
+<div th:replace="~{common::memberFoot}"></div>
+</body>
+<script>
+    $.ajax({
+        url:'/ex/noticeMem/look',
+        type:'post',
+        data:'id=[[${notice.id}]]',
+    })
+
+    $("#lan").change(function (){
+        $("#formLan").submit();
+    })
+
+    $("#searchBtn").click(function (e){
+        let val = $("#search").val();
+        if(val==null||val.trim().length==0){
+            e.preventDefault();
+        }
+    })
+
+    $("#personalInfoBtn").click(function (){
+        window.location.href="/ex/member?act=updateSession";
+    })
+</script>
+</html>
