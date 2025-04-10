@@ -58,11 +58,11 @@
             </div>
         </div>
         <div class="col-3 pt-5 mt-5">
-            <form method="POST" th:action="@{/login}" id="loginform">
+            <form method="POST" id="loginform">
                 <h2 class="text-center text-light">欢迎登录</h2>
                 <div class="form-group mb-2">
                     <label for="username" class="text-white">用户名</label>
-                    <input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" th:each="cookie:${#httpServletRequest.getCookies()}" th:value="${cookie.yhm.value}">
+                    <input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp">
                     <small id="usernameHelp" class="form-text text-light"></small>
                 </div>
                 <div class="form-group mb-3">
@@ -116,7 +116,7 @@
             <small>刚刚</small>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-        <div class="toast-body" th:if="${msg}">[[${msg}]][[${t==0?'注册成功,请登录':''}]][[t==1?'注册成功,请登录':'']][[t==2?'修改成功,请重新登录':'']][[t==3?'请先登录':'']]</div>
+        <div class="toast-body" th:if="${msg!=null || t!=null}">[[${msg}]][[${t==0?'已安全退出':''}]][[${t==1?'注册成功,请登录':''}]][[${t==2?'修改成功,请重新登录':''}]][[${t==3?'请先登录':''}]]</div>
     </div>
 </div>
 <script>
@@ -128,20 +128,40 @@
             toast.show()
         }
     })
+
     let old=$("#captchaImg").attr("th:src")
     $("#captchaImg").click(function (){
         let n=Math.random();
         let oldSrc = old.substring(0,old.length-1);
         $("#captchaImg").attr("th:src",oldSrc+"(k="+n+")}");
     })
+
     $("#Check2").change(function (){
         //这里不能用attr 用attr取出来是undefined
-        let c=$("#Check2").prop("checked")
+        let c=$("#Check2").is(':checked')
+        console.log(c)
         if(c){
-            $("#loginform").attr("th:action","@{/login2}")
+            $("#loginform").attr("action","/ex/login2")
         }else{
-            $("#loginform").attr("th:action","@{/login}")
+            $("#loginform").attr("action","/ex/login")
         }
+    })
+
+    $(function (){
+        $.ajax({
+            url:'/ex/getCookie',
+            type:'post',
+            async:'false',
+            dataType:'text',
+            success:function (cookie){
+                console.log(cookie)
+                if(cookie!=""&&cookie.length>0){
+                    $("#username").prop("value",cookie);
+                }else{
+                    $("#username").prop("value","");
+                }
+            }
+        })
     })
 </script>
 </body>

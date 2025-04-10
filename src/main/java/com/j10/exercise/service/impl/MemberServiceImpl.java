@@ -1,6 +1,7 @@
 package com.j10.exercise.service.impl;
 
 import cn.hutool.crypto.digest.BCrypt;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.j10.exercise.bean.Member;
 import com.j10.exercise.exception.CustomerException;
@@ -23,11 +24,18 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     @Override
     public Member login(Member m) {
         //1:检查数据库记录是否有该用户名  2:进行密码验证
-        Member member = memberMapper.checkUsername(m);
-        if (BCrypt.checkpw(m.getPassword(), member.getPassword())) {
-            return memberMapper.selectById(member.getId());
+        QueryWrapper<Member> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", m.getUsername());
+        Member member = m.selectOne(queryWrapper);
+        if(member == null){
+            return null;
         }else{
-            throw new CustomerException(Constants.PASSWORD_MSG, 500);
+            if (BCrypt.checkpw(m.getPassword(), member.getPassword())) {
+                return member;
+            }else{
+                throw new CustomerException(Constants.PASSWORD_MSG, 500);
+            }
         }
     }
+
 }

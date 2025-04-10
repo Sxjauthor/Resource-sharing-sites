@@ -1,6 +1,7 @@
 package com.j10.exercise.bean;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @TableName("member")
-public class Member {
+public class Member extends Model<Member> {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String username;

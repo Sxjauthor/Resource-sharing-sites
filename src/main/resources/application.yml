@@ -11,3 +11,5 @@ spring:
     basename: j10
 mybatis-plus:
   type-aliases-package: 'com.j10.exercise.bean'
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

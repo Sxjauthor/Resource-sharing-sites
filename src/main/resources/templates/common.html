@@ -60,13 +60,13 @@
             <a th:if="${session.member==null}" th:href="@{/login.html}" class="btn btn-success" th:text="#{Login}"></a>
 
             <div class="btn-group" th:if="${session.member!=null}">
-                <img style="cursor: pointer;" th:src="${head}/${session.member.head}"
+                <img style="cursor: pointer;" th:src="@{${application.head}+'/'+${session.member.head}}"
                      class="dropdown-toggle rounded" data-bs-toggle="dropdown" aria-expanded="false" width="40px"/>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><button class="dropdown-item" type="button" disabled>会员-[[${sessionScope.member.nick}]]</button></li>
+                    <li><button class="dropdown-item" type="button" disabled>会员-[[${session.member.nick}]]</button></li>
                     <li th:if="${session.member.signflag==0}"><a class="dropdown-item" type="button" th:href="@{/member(act='sign')}">签到</a></li>
                     <li th:if="${session.member.signflag==1}"><a class="dropdown-item disabled" type="button">已签到</a></li>
-                    <li><a class="dropdown-item disabled" type="button">金币:[[${sessionScope.member.gold}]]</a></li>
+                    <li><a class="dropdown-item disabled" type="button">金币:[[${session.member.gold}]]</a></li>
                     <li><button class="dropdown-item" type="button" id="personalInfoBtn">个人资料</button></li>
                     <li><button class="dropdown-item" type="button" id="share" data-bs-toggle="modal" data-bs-target="#shareModal">分享上传</button></li>
                     <li><hr class="dropdown-divider"></li>
@@ -121,5 +121,28 @@
         </a>
     </div>
 </div>
+
+<!--管理员 导航栏-->
+<div class="container-fluid bg-dark d-flex justify-content-between" th:fragment="managerNav">
+    <a class="d-block p-2" th:href="@{/index.html}">
+        <img th:src="@{/img/logo.png}" width="160px"/>
+    </a>
+    <div>
+        <div class="btn-group">
+            <div class="dropdown-toggle rounded text-light p-2" data-bs-toggle="dropdown" aria-expanded="false" >
+                <img style="cursor: pointer;" th:src="@{/img/head5.jpeg}"
+                     width="50px"/>
+                <span>[[${session.manager.rolename}]] - [[${session.manager.display}]]</span>
+            </div>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><button class="dropdown-item" type="button">签到</button></li>
+                <li><button class="dropdown-item" type="button">个人资料</button></li>
+                <li><button class="dropdown-item" type="button">上传资料</button></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" type="button" th:href="@{/login2}" id="logout">安全退出</a></li>
+            </ul>
+        </div>
+    </div>
+</div >
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.j10.exercise.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -24,5 +25,15 @@ public class PagesController {
     @RequestMapping("/register.html")
     public String register() {
         return "register";
+    }
+
+    @RequestMapping("/main.html")
+    public String main() {
+        return "main";
+    }
+
+    @RequestMapping("/default.html")
+    public String defaultPage() {
+        return "default";
     }
 }
