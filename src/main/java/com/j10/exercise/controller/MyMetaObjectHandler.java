@@ -21,6 +21,14 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         if(b){
             metaObject.setValue("joindate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         }
+        boolean b1 = metaObject.hasSetter("commdate");
+        if(b1){
+            metaObject.setValue("commdate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        }
+        boolean b2 = metaObject.hasSetter("favdate");
+        if(b2){
+            metaObject.setValue("favdate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        }
     }
 
     @Override

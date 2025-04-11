@@ -320,12 +320,12 @@
         $.ajax({
             url:'/ex/resload',
             type:'post',
-            data:'act=r2',
+            data:'type=2',
             dataType:'json',
             success:function (list){
                 for (let i = 0; i < list.length; i++) {
                     let res=list[i];
-                    let href="/ex/resDetail?act=detail2&id="+res.id;
+                    let href="/ex/resDetail?type=2&id="+res.id;
                     if(i==0){
                         $("#a1").text(res.resname).prop("href",href)
                     }else if(i==1){
@@ -338,9 +338,9 @@
                     a.prop("href",href);
                     let c1 = $(`<div class="d-flex"></div>`);
                     let c11 = $(`<div></div>`);
-                    let img = $(`<img th:src="" width="54px" height="54px" class="border rounded"/>`);
-                    let src="${application.icon}"+res.thumbnail
-                    img.prop("th:src",src);
+                    let img = $(`<img src="" width="54px" height="54px" class="border rounded"/>`);
+                    let src='[[${application.icon}]]'+res.thumbnail
+                    img.prop("src",src);
                     c11.append(img);
                     c1.append(c11);
                     let c12 = $(`<div class="ms-2 text-muted fs-9"></div>`);
@@ -364,13 +364,13 @@
                     let c2=$(`<div class="d-flex justify-content-between"></div>`)
                     let c21=$(`<div></div>`)
                     let span1=$(`<span class="fs-9 text-muted"></span>`)
-                    let svg1=$(`<img th:src="@{/img/calendar.svg}"/>`)
+                    let svg1=$(`<img src="/ex/img/calendar.svg"/>`)
                     span1.append(svg1)
                     let date=String(res.joindate)
                     span1.append(date.substring(5,10))
                     c21.append(span1)
                     let span2=$(`<span class="ms-2 fs-9 text-muted"></span>`)
-                    let svg2=$(`<img th:src="@{/img/look.svg}"/>`)
+                    let svg2=$(`<img src="/ex/img/look.svg"/>`)
                     span2.append(svg2)
                     span2.append(res.pv)
                     c21.append(span2)
@@ -378,8 +378,8 @@
                     let c22=$(`<div></div>`)
                     let button2=$(`<a class="btn btn-sm btn-outline-success rounded-pill">获取</a>`)
                     let getId="get"+res.id;
-                    let href1="@{/resDetail(act=downloadS,id="+res.id+")}";
-                    button2.prop("th:href",href1).prop("id",getId).prop("name",free);
+                    let href1="/ex/resDetail/download?type=2&id="+res.id;
+                    button2.prop("href",href1).prop("id",getId).prop("name",free);
                     c22.append(button2)
                     c2.append(c22)
                     a.append(c2)
@@ -393,20 +393,20 @@
         $.ajax({
             url:'/ex/resload',
             type:'post',
-            data:'act=r3',
+            data:'type=3',
             dataType:'json',
             success:function (list){
                 for (let i = 0; i < list.length; i++) {
                     let res=list[i];
                     let container = $("#con2");
                     let a = $(`<a class="d-block w-2x text-decoration-none h-200  mb-3 border rounded p-2"></a>`);
-                    let href="@{/resDetail(act=detail3,id="+res.id+")}";
-                    a.prop("th:href",href);
+                    let href="/ex/resDetail?type=3&id="+res.id;
+                    a.prop("href",href);
                     let c1 = $(`<div class="d-flex"></div>`);
                     let c11 = $(`<div></div>`);
                     let img = $(`<img th:src="" width="54px" height="54px" class="border rounded"/>`);
-                    let src="${application.icon}"+res.thumbnail
-                    img.prop("th:src",src);
+                    let src="[[${application.icon}]]"+res.thumbnail
+                    img.prop("src",src);
                     c11.append(img);
                     c1.append(c11);
                     let c12 = $(`<div class="ms-2 text-muted fs-9"></div>`);
@@ -430,13 +430,13 @@
                     let c2=$(`<div class="d-flex justify-content-between"></div>`)
                     let c21=$(`<div></div>`)
                     let span1=$(`<span class="fs-9 text-muted"></span>`)
-                    let svg1=$(`<img th:src="@{/img/calendar.svg}"/>`)
+                    let svg1=$(`<img src="/ex/img/calendar.svg"/>`)
                     span1.append(svg1)
                     let date=String(res.joindate)
                     span1.append(date.substring(5,10))
                     c21.append(span1)
                     let span2=$(`<span class="ms-2 fs-9 text-muted"></span>`)
-                    let svg2=$(`<img th:src="@{/img/look.svg}"/>`)
+                    let svg2=$(`<img src="/ex/img/look.svg"/>`)
                     span2.append(svg2)
                     span2.append(res.pv)
                     c21.append(span2)
@@ -444,8 +444,8 @@
                     let c22=$(`<div></div>`)
                     let button2=$(`<a class="btn btn-sm btn-outline-success rounded-pill">获取</a>`)
                     let getId="get"+res.id;
-                    let href1="@{/resDetail(act=downloadD,id="+res.id+")}";
-                    button2.prop("th:href",href1).prop("id",getId).prop("name",free);
+                    let href1="/ex/resDetail/download?type=3&id="+res.id;
+                    button2.prop("href",href1).prop("id",getId).prop("name",free);
                     c22.append(button2)
                     c2.append(c22)
                     a.append(c2)
@@ -459,20 +459,20 @@
         $.ajax({
             url:'/ex/resload',
             type:'post',
-            data:'act=r1',
+            data:'type=1',
             dataType:'json',
             success:function (list){
                 for (let i = 0; i < list.length; i++) {
                     let res=list[i];
                     let container = $("#con3");
                     let a = $(`<a class="d-block w-2x text-decoration-none h-200  mb-3 border rounded p-2"></a>`);
-                    let href="@{/resDetail?(act=detail1,id="+res.id+")}";
-                    a.prop("th:href",href);
+                    let href="/ex/resDetail?type=1&id="+res.id;
+                    a.prop("href",href);
                     let c1 = $(`<div class="d-flex"></div>`);
                     let c11 = $(`<div></div>`);
                     let img = $(`<img th:src="" width="100px" height="54px" class="border rounded"/>`);
-                    let src="${application.img}"+res.thumbnail
-                    img.prop("th:src",src);
+                    let src="[[${application.img}]]"+res.thumbnail
+                    img.prop("src",src);
                     c11.append(img);
                     c1.append(c11);
                     let c12 = $(`<div class="ms-2 text-muted fs-9"></div>`);
@@ -496,13 +496,13 @@
                     let c2=$(`<div class="d-flex justify-content-between"></div>`)
                     let c21=$(`<div></div>`)
                     let span1=$(`<span class="fs-9 text-muted"></span>`)
-                    let svg1=$(`<img th:src="@{/img/calendar.svg}"/>`)
+                    let svg1=$(`<img src="/ex/img/calendar.svg"/>`)
                     span1.append(svg1)
                     let date=String(res.joindate)
                     span1.append(date.substring(5,10))
                     c21.append(span1)
                     let span2=$(`<span class="ms-2 fs-9 text-muted"></span>`)
-                    let svg2=$(`<img th:src="@{/img/look.svg}"/>`)
+                    let svg2=$(`<img src="/ex/img/look.svg"/>`)
                     span2.append(svg2)
                     span2.append(res.pv)
                     c21.append(span2)
@@ -510,8 +510,8 @@
                     let c22=$(`<div></div>`)
                     let button2=$(`<a class="btn btn-sm btn-outline-success rounded-pill">获取</a>`)
                     let getId="get"+res.id;
-                    let href1="@{/resDetail(act=downloadW,id="+res.id+")}";
-                    button2.prop("th:href",href1).prop("id",getId).prop("name",free);
+                    let href1="/ex/resDetail/download?type=1&id="+res.id;
+                    button2.prop("href",href1).prop("id",getId).prop("name",free);
                     c22.append(button2)
                     c2.append(c22)
                     a.append(c2)
@@ -521,7 +521,7 @@
         })
     })
     $(document).on("click","a[id^=get]",function (e){
-        let gold =Number("${session.member.gold}") ;
+        let gold =Number("[[${session.member.gold}]]") ;
         console.log("gold=="+gold)
         let isFree = Number($(this).prop("name"));
         console.log("isFree=="+isFree)

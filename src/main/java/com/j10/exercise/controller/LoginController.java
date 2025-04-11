@@ -75,8 +75,6 @@ public class LoginController {
             }
             HttpSession session = req.getSession();
             session.setAttribute("member",success);
-            ServletContext app = req.getServletContext();
-            app.setAttribute("head", Constants.HEAD_PATH);
             return "redirect:/index.html";
         }
     }

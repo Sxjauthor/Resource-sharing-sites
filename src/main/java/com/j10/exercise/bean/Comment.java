@@ -34,10 +34,9 @@ public class Comment {
     @TableField(exist = false)
     private String username;
 
-    public Comment(Integer mid, Integer rid, String content, String commdate) {
+    public Comment(Integer mid, Integer rid, String content) {
         this.mid = mid;
         this.rid = rid;
         this.content = content;
-        this.commdate = commdate;
     }
 }

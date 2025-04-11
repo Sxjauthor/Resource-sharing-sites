@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--引入公共head部分-->
+    <th:block th:include="~{common::commonHead}"></th:block>
+    <title>资源详情</title>
+    <style>
+        body{
+            background-color: #F6F6F6;
+        }
+        #back{
+            height:45px;
+        }
+        a{
+            text-decoration: none;
+            color:#6B6B6B;
+            line-height: 45px;
+        }
+        a:hover{
+            color:#FFC107;
+        }
+        #con{
+            width: 1200px;
+            margin: 0px auto;
+        }
+    </style>
+</head>
+<body>
+<!-- 第一部分 导航栏 -->
+<div th:replace="~{common::memberNav}"></div>
+
+<div id="back">
+    <a href="javascript:window.history.back()" class="fs-5">>>>返回</a>
+</div>
+<!-- 第二部分 资源详情 -->
+<div class="container-fluid mb-4" id="con">
+    <div class="row">
+        <div class="col-md-8">
+            <img th:src="@{${application.icon}+${res.thumbnail}}" class="img-fluid rounded" alt="图片展示">
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title text-success fw-bold">资源详情</h5>
+                    <p class="card-text">分类: [[${res.supname}]][[${res.subname==null?'':'-'}]][[${res.subname}]]</p>
+                    <p class="card-text">描述: [[${res.display}]]</p>
+                    <p class="card-text">价值: [[${res.isFree}]]金币</p>
+                    <p class="card-text">下载量: [[${res.down}]]</p>
+                    <p class="card-text">上传人: role[[${res.uploader}]]</p>
+                    <p class="card-text">上传时间: [[${res.joindate}]]</p>
+                    <a th:href="@{/resDetail/download(type=2,id=${res.id})}" class="btn btn-success btn-block" id="get" th:name="${res.isFree}">下载软件</a>
+                    &nbsp;&nbsp;<img th:src="@{/img/star1.svg}" id="fav"/><span id="favspan">[[${res.fav}]]</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="card">
+            <div class="card-body">
+                <p class="fw-bold">评论</p>
+                <hr class="border-secondary">
+                <div class="row mb-4">
+                    <div class="col-1 pe-0">
+                        <img th:src="@{${application.head}+'/'+${session.member.head}}" width="50px" height="50px"
+                             class="rounded-5"/>
+                    </div>
+                    <div class="col-10 p-0">
+                        <form id="publishForm" th:action="@{/resDetail/publish(rid=${res.id},type=${res.type})}" method="post">
+                            <input class="form-control" id="comment" name="comment" type="text" size="90px" style="height: 50px;"
+                                   placeholder="我的评价是..."/>
+                        </form>
+                    </div>
+                    <div class="col-1">
+                        <a class="btn btn-outline-success btn-sm mt-2" id="publish">发表</a>
+                    </div>
+                </div>
+                <div class="row mt-1" th:each="comment:${list}">
+                    <div class="col-1 pe-0 pt-2">
+                        <img th:src="@{${application.head}+'/'+${comment.head}}" width="60px" height="60px"
+                             class="rounded-5"/>
+                    </div>
+                    <div class="col-10 p-0">
+                        <label class="form-label">[[${comment.username}]]</label>
+                        <p class="form-control">[[${comment.content}]]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 最下面的底部-->
+<div th:replace="~{common::memberFoot}"></div>
+
+<!--toast-->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img th:src="@{/img/favicon.ico}" width="20px" class="rounded me-2" alt="...">
+            <strong class="me-auto">资源详情</strong>
+            <small>刚刚</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">[[${msg}]]</div>
+    </div>
+</div>
+</body>
+<script>
+    $("#publish").click(function (){
+        let val1 = $("#comment").val();
+        if(val1!=null&&val1.trim().length>0){
+            $("#publishForm").submit();
+        }
+    })
+    $("#personalInfoBtn").click(function (){
+        window.location.href="/ex/member/updateSession";
+    })
+    $("#get").click(function (e){
+        let isFree = Number($("#get").prop("name"));
+        let gold=Number("[[${session.member.gold}]]");
+        if(gold<isFree){
+            alert("金币不足,无法下载");
+            e.preventDefault();
+        }
+    })
+    $(function(){
+        let text=$(".toast-body").text();
+        if(text!=null&&text.length>0){
+            let toastLiveExample = document.getElementById('liveToast')
+            let toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        }
+    })
+    $("#fav").click(function (){
+        let src = $("#fav").prop("src");
+        let s = src.substring(33, 34);
+        if(s==1){
+            $.ajax({
+                url:'/ex/resDetail/fav',
+                type:'post',
+                data:'i=1&id='+"[[${res.id}]]",
+                dataType:'json',
+                success:function (res){
+                    let src="/ex/img/star2.svg";
+                    $("#fav").prop("src",src);
+                    $("#favspan").text(res.fav)
+                }
+            })
+        }else if(s==2){
+            $.ajax({
+                url:'/ex/resDetail/fav',
+                type:'post',
+                data:'i=-1&id='+"[[${res.id}]]",
+                dataType:'json',
+                success:function (res){
+                    let src="/ex/img/star1.svg";
+                    $("#fav").prop("src",src);
+                    $("#favspan").text(res.fav)
+                }
+            })
+        }
+    })
+    $(function (){
+        $.ajax({
+            url:'/ex/resDetail/isFav',
+            type:'post',
+            data:'id='+"[[${res.id}]]",
+            dataType:'text',
+            success:function (b){
+                if(b==1){
+                    let src="/ex/img/star2.svg";
+                    $("#fav").prop("src",src);
+                }else if(b==0){
+                    let src="/ex/img/star1.svg";
+                    $("#fav").prop("src",src);
+                }
+
+            }
+        })
+    })
+    $("#lan").change(function (){
+        $("#formLan").submit();
+    })
+    $("#searchBtn").click(function (e){
+        let val = $("#search").val();
+        if(val==null||val.trim().length==0){
+            e.preventDefault();
+        }
+    })
+</script>
+</html>
