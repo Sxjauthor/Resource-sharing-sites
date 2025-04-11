@@ -42,12 +42,12 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <form th:action="@{/(lan='en_US')}" method="post" id="formLan">
-                        <select id="lan" class="form-select" name="lan">
-                            <option th:selected="${locale=='zh_CN'?'selected':''}" value="zh_CN">中文</option>
-                            <option th:selected="${locale=='en_US'?'selected':''}" value="en_US">English</option>
-                            <option th:selected="${locale=='ko_KR'?'selected':''}" value="ko_KR">한글</option>
-                            <option th:selected="${locale=='fr_FR'?'selected':''}" value="fr_FR">En français</option>
+                    <form>
+                        <select class="form-select">
+                            <option id="zh">中文</option>
+                            <option id="en">English</option>
+                            <option id="ko">한글</option>
+                            <option id="fr">En français</option>
                         </select>
                     </form>
                 </li>
@@ -75,6 +75,56 @@
             </div>
         </div>
     </div>
+    <script>
+    <!-- 国际化jquery -->
+        $(function (){
+            let locale="[[${session.locale}]]"
+            console.log(locale)
+            if(locale.length>0){
+                if(locale=="zh_CN"){
+                    $("#zh").prop("selected",true)
+                }else if(locale=="en_US"){
+                    $("#en").prop("selected",true)
+                }else if(locale=="ko_KR"){
+                    $("#ko").prop("selected",true)
+                }else if(locale=="fr_FR"){
+                    $("#fr").prop("selected",true)
+                }
+            }
+        })
+        $("#zh").click(function (){
+            window.location.href="/ex/index.html?lan=zh_CN"
+            $.ajax({
+                url:'/ex/setlocale',
+                type:'post',
+                data:'lan=zh_CN'
+            })
+        })
+        $("#en").click(function (){
+            window.location.href="/ex/index.html?lan=en_US"
+            $.ajax({
+                url:'/ex/setlocale',
+                type:'post',
+                data:'lan=en_US'
+            })
+        })
+        $("#ko").click(function (){
+            window.location.href="/ex/index.html?lan=ko_KR"
+            $.ajax({
+                url:'/ex/setlocale',
+                type:'post',
+                data:'lan=ko_KR'
+            })
+        })
+        $("#fr").click(function (){
+            window.location.href="/ex/index.html?lan=fr_FR"
+            $.ajax({
+                url:'/ex/setlocale',
+                type:'post',
+                data:'lan=fr_FR'
+            })
+        })
+    </script>
 </nav>
 
 <!--会员界面 底部-->

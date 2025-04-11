@@ -218,9 +218,6 @@
             new bootstrap.Toast(liveToastTemplate).show()
         }
     })
-    $("#lan").change(function (){
-        $("#formLan").submit();
-    })
 
     $("#searchBtn").click(function (e){
         let val = $("#search").val();

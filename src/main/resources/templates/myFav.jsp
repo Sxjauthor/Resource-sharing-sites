@@ -254,9 +254,6 @@
         $(this).removeClass("text-warning").addClass("text-muted");;
     })
 
-    $("#lan").change(function (){
-        $("#formLan").submit();
-    })
     $("#searchBtn").click(function (e){
         let val = $("#search").val();
         if(val==null||val.trim().length==0){

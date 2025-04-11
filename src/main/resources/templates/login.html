@@ -129,11 +129,9 @@
         }
     })
 
-    let old=$("#captchaImg").attr("th:src")
     $("#captchaImg").click(function (){
         let n=Math.random();
-        let oldSrc = old.substring(0,old.length-1);
-        $("#captchaImg").attr("th:src",oldSrc+"(k="+n+")}");
+        $("#captchaImg").attr("src","/ex/captcha?k="+n);
     })
 
     $("#Check2").change(function (){

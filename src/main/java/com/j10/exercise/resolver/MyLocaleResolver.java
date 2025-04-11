@@ -1,9 +1,7 @@
 package com.j10.exercise.resolver;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +22,13 @@ public class MyLocaleResolver implements LocaleResolver {
             String[] split = locale.split("_");
             return new Locale(split[0], split[1]);
         }
-        return Locale.getDefault(); //返回服务器所在地区国际化信息
+        String loc = (String) request.getSession().getAttribute("locale");
+        if (StringUtils.hasText(loc)&&loc.contains("_")) {
+            String[] split = loc.split("_");
+            return new Locale(split[0], split[1]);
+        }else{
+            return Locale.getDefault(); //返回服务器所在地区国际化信息
+        }
     }
 
     @Override
