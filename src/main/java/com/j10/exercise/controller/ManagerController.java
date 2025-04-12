@@ -1,6 +1,7 @@
 package com.j10.exercise.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.j10.exercise.bean.Manager;
 import com.j10.exercise.bean.Role;
 import com.j10.exercise.service.ManagerService;
@@ -8,10 +9,9 @@ import com.j10.exercise.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,21 +62,22 @@ public class ManagerController {
         model.addAttribute("manager",manager);
         List<Role> roleList=roleService.list();
         model.addAttribute("roleList",roleList);
-        return "forward:/admin/ModifyManagerInfo.html";
+        return "admin/ModifyManagerInfo";
     }
 
     @RequestMapping("/role/updateManager")
     public String updateManager(Manager manager, Model model) {
-        manager.updateById();
+        UpdateWrapper<Manager> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.eq("id",manager.getId()).set(StringUtils.hasText(manager.getPassword()),"password",manager.getPassword()).set("roleid",manager.getRoleid());
         model.addAttribute("msg","修改管理员信息成功");
-        return "forward:/role";
+        return "admin/role";
     }
 
     @RequestMapping("/role/deleteM")
     public String deleteManager(Manager manager, Model model) {
         manager.deleteById();
         model.addAttribute("msg","删除管理员成功");
-        return "forward:/role";
+        return "admin/role";
     }
 
     @RequestMapping("/role/delsM")
@@ -88,7 +89,7 @@ public class ManagerController {
         }
         managerService.removeBatchByIds(ids);
         model.addAttribute("msg", "删除管理员成功");
-        return "forward:/role";
+        return "admin/role";
     }
 
 }

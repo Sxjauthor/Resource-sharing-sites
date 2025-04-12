@@ -4,6 +4,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.j10.exercise.bean.Comment;
 import com.j10.exercise.bean.Favorite;
 import com.j10.exercise.bean.Member;
@@ -16,10 +17,12 @@ import com.sun.jersey.api.client.WebResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -281,5 +284,157 @@ public class ResourceController {
             model.addAttribute("msg","上传成功,审核中...");
         }
         return "index";
+    }
+
+    @RequestMapping("/res/img")
+    public String r1List(String resname,String status,String cur,Model model) {
+        if(status==null){
+            status="0";
+        }
+        QueryWrapper<Resource> queryWrapper=new QueryWrapper<>();
+        Integer state = Integer.parseInt(status);
+        queryWrapper.eq("type",1).eq(!status.equals("0"),"status",state).
+                and(StringUtils.hasText(resname),qw->{
+            qw.like("resname",resname).or().like("display",resname);
+        });
+        Page<Resource> page=new Page<>();
+        if(cur!=null&&cur.trim().length()>0){
+            page.setCurrent(Integer.parseInt(cur));
+        }
+        page.setSize(7);
+        page = resourceService.page(page, queryWrapper);
+        List<Long> pageList=new ArrayList<>();
+        for (long i = page.getCurrent()-2; i <= page.getCurrent()+2; i++) {
+            if(i>0&&i<=page.getPages()){
+                pageList.add(i);
+            }
+        }
+        model.addAttribute("resname",resname);
+        model.addAttribute("status",status);
+        model.addAttribute("page", page);
+        model.addAttribute("pageList",pageList);
+        return "admin/r1List";
+    }
+
+    @RequestMapping("/res/ban")
+    public String ban(String id,String type,Model model) {
+        UpdateWrapper<Resource> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.eq("id",id).set("status",2);
+        resourceService.update(updateWrapper);
+        model.addAttribute("msg","资源禁用成功");
+        if(type.equals("1")){
+            return "forward:/res/img";
+        }else if(type.equals("2")){
+            return "forward:/res/soft";
+        }else{
+            return "forward:/res/doc";
+        }
+    }
+
+    @RequestMapping("/res/recover")
+    public String imgRecover(String id,String type,Model model) {
+        UpdateWrapper<Resource> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.eq("id",id).set("status",1);
+        resourceService.update(updateWrapper);
+        model.addAttribute("msg","资源恢复成功");
+        if(type.equals("1")){
+            return "forward:/res/img";
+        }else if(type.equals("2")){
+            return "forward:/res/soft";
+        }else{
+            return "forward:/res/doc";
+        }
+    }
+
+    @RequestMapping("/res/pass")
+    public String imgPass(String id,String type,Model model) {
+        UpdateWrapper<Resource> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.eq("id",id).set("status",1);
+        resourceService.update(updateWrapper);
+        Resource resource = resourceService.getById(Integer.parseInt(id));
+        //会员加金币
+        if(resource.getUploader()!=null){
+            QueryWrapper<Member> queryWrapper=new QueryWrapper<>();
+            queryWrapper.eq("id",resource.getUploader());
+            Member member=new Member();
+            Member mem = member.selectOne(queryWrapper);
+            UpdateWrapper<Member> uw=new UpdateWrapper<>();
+            if(resource.getType()==1){//壁纸2
+                uw.eq("id",mem.getId()).set("gold",mem.getGold()+2);
+            }else if(resource.getType()==2){//软件5
+                uw.eq("id",mem.getId()).set("gold",mem.getGold()+5);
+            }else if(resource.getType()==3){//资料3
+                uw.eq("id",mem.getId()).set("gold",mem.getGold()+3);
+            }
+            mem.update(uw);
+        }
+        model.addAttribute("msg","资源审核通过");
+        if(type.equals("1")){
+            return "forward:/res/img";
+        }else if(type.equals("2")){
+            return "forward:/res/soft";
+        }else{
+            return "forward:/res/doc";
+        }
+    }
+
+    @RequestMapping("/res/soft")
+    public String r2List(String resname,String status,String cur,Model model) {
+        if(status==null){
+            status="0";
+        }
+        QueryWrapper<Resource> queryWrapper=new QueryWrapper<>();
+        Integer state = Integer.parseInt(status);
+        queryWrapper.eq("type",2).eq(!status.equals("0"),"status",state).
+                and(StringUtils.hasText(resname),qw->{
+                    qw.like("resname",resname).or().like("display",resname);
+                });
+        Page<Resource> page=new Page<>();
+        if(cur!=null&&cur.trim().length()>0){
+            page.setCurrent(Integer.parseInt(cur));
+        }
+        page.setSize(7);
+        page = resourceService.page(page, queryWrapper);
+        List<Long> pageList=new ArrayList<>();
+        for (long i = page.getCurrent()-2; i <= page.getCurrent()+2; i++) {
+            if(i>0&&i<=page.getPages()){
+                pageList.add(i);
+            }
+        }
+        model.addAttribute("resname",resname);
+        model.addAttribute("status",status);
+        model.addAttribute("page", page);
+        model.addAttribute("pageList",pageList);
+        return "admin/r2List";
+    }
+
+    @RequestMapping("/res/doc")
+    public String r3List(String resname,String status,String cur,Model model) {
+        if(status==null){
+            status="0";
+        }
+        QueryWrapper<Resource> queryWrapper=new QueryWrapper<>();
+        Integer state = Integer.parseInt(status);
+        queryWrapper.eq("type",3).eq(!status.equals("0"),"status",state).
+                and(StringUtils.hasText(resname),qw->{
+                    qw.like("resname",resname).or().like("display",resname);
+                });
+        Page<Resource> page=new Page<>();
+        if(cur!=null&&cur.trim().length()>0){
+            page.setCurrent(Integer.parseInt(cur));
+        }
+        page.setSize(7);
+        page = resourceService.page(page, queryWrapper);
+        List<Long> pageList=new ArrayList<>();
+        for (long i = page.getCurrent()-2; i <= page.getCurrent()+2; i++) {
+            if(i>0&&i<=page.getPages()){
+                pageList.add(i);
+            }
+        }
+        model.addAttribute("resname",resname);
+        model.addAttribute("status",status);
+        model.addAttribute("page", page);
+        model.addAttribute("pageList",pageList);
+        return "admin/r3List";
     }
 }

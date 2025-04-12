@@ -47,7 +47,7 @@
     <ul class="pagination justify-content-center">
         <li th:if="${page.current!=1}" class="page-item"><a class="page-link" th:href="@{/noticeMem/noticeList(title=${title})}">首页</a></li>
         <li th:if="${page.current!=1}" class="page-item"><a class="page-link" th:href="@{/noticeMem/noticeList(curpage=${page.current}-1,title=${title})}">上一页</a></li>
-        <li th:each="i:${pageList}" th:class="page-item" th:classappend="${page.current == i ? 'active' : ''}"><a class="page-link" th:href="@{/noticeMem/noticeList(curpage=${i},title=${title})}">[[${i}]]</a></li>
+        <li th:each="i:${pageList}" class="page-item" th:classappend="${page.current == i ? 'active' : ''}"><a class="page-link" th:href="@{/noticeMem/noticeList(curpage=${i},title=${title})}">[[${i}]]</a></li>
         <li th:if="${page.current!=page.pages}" class="page-item"><a class="page-link" th:href="@{/noticeMem/noticeList(curpage=${page.current+1},title=${title})}">下一页</a></li>
         <li th:if="${page.current!=page.pages}" class="page-item"><a class="page-link" th:href="@{/noticeMem/noticeList(curpage=${page.pages},title=${title})}">尾页</a></li>
         <li class="page-item"><a class="page-link"><span>[[${page.current}]]</span>/<span>[[${page.pages}]]</span></a></li>

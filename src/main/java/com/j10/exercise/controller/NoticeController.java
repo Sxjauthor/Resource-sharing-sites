@@ -7,14 +7,11 @@ import com.j10.exercise.bean.Manager;
 import com.j10.exercise.bean.Notice;
 import com.j10.exercise.service.ManagerService;
 import com.j10.exercise.service.NoticeService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +93,7 @@ public class NoticeController {
                 pageList.add(i);
             }
         }
+        model.addAttribute("title",title);
         model.addAttribute("page",page);
         model.addAttribute("pageList",pageList);
         return "more";

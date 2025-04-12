@@ -1,26 +1,21 @@
 package com.j10.exercise.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.j10.exercise.bean.Action;
 import com.j10.exercise.bean.Manager;
 import com.j10.exercise.bean.Role;
-import com.j10.exercise.mapper.ActionMapper;
 import com.j10.exercise.service.ActionService;
 import com.j10.exercise.service.RoleService;
 import com.j10.exercise.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,7 +34,7 @@ public class RoleController {
     public String rolelist(Model model) {
         List<Role> roleList=roleService.list();
         model.addAttribute("roleList",roleList);
-        return "forward:/role";
+        return "admin/role";
     }
 
     @RequestMapping("/role/roleAddPre")
@@ -47,7 +42,7 @@ public class RoleController {
         Action action=new Action();
         List<Action> actions=action.selectAll();
         model.addAttribute("actions",actions);
-        return "forward:/admin/roleadd.html";
+        return "admin/roleadd";
     }
 
     @RequestMapping("/role/roleAdd")
@@ -62,7 +57,7 @@ public class RoleController {
         model.addAttribute("msg","新增角色成功");
         List<Role> roleList=roleService.list();
         model.addAttribute("roleList",roleList);
-        return "forward:/role";
+        return "admin/role";
     }
 
     @RequestMapping("/role/checkRoleName")
@@ -80,7 +75,7 @@ public class RoleController {
         model.addAttribute("roleid",roleid);
         model.addAttribute("rolename",rolename);
         model.addAttribute("display",display);
-        return "forward:/admin/roleActionInfo.html";
+        return "admin/roleActionInfo";
     }
 
     @RequestMapping("/role/updateRole")
@@ -98,7 +93,7 @@ public class RoleController {
         model.addAttribute("rolename",rolename);
         model.addAttribute("display",display);
         model.addAttribute("msg", "修改成功");
-        return "forward:/admin/roleActionInfo.html";
+        return "admin/roleActionInfo";
     }
 
     @RequestMapping("/role/delRole")
@@ -109,7 +104,7 @@ public class RoleController {
         model.addAttribute("msg","删除角色成功");
         List<Role> roleList=roleService.list();
         model.addAttribute("roleList",roleList);
-        return "forward:/role";
+        return "admin/role";
     }
 
     @RequestMapping("/role/delsR")
@@ -123,7 +118,7 @@ public class RoleController {
         model.addAttribute("msg", "删除角色成功");
         List<Role> roleList=roleService.list();
         model.addAttribute("roleList",roleList);
-        return "forward:/role";
+        return "admin/role";
     }
 
     @RequestMapping("/role/addManager")
@@ -131,7 +126,7 @@ public class RoleController {
         Manager manager=new Manager(username, Constants.DEFAULT_PASSWORD,Integer.parseInt(roleid));
         manager.insert();
         model.addAttribute("msg","新增管理员成功");
-        return "forward:/role";
+        return "admin/role";
     }
 
     @RequestMapping("/role/roleListJson")

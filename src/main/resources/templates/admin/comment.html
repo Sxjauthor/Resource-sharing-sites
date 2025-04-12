@@ -9,13 +9,13 @@
 <div class="container-fluid">
     <button class="btn btn-secondary disabled">资源评论管理</button>
     <div class=" py-2 d-flex">
-        <form class="d-flex w-50" method="post" th:action="@{/res/img(act='comment',id=${id})}">
-            <input class="form-control me-2 w-50 border-primary" type="text" placeholder="Search" name="content" value="${requestScope.content}">
+        <form class="d-flex w-50" method="post" th:action="@{/res/comment(id=${id})}">
+            <input class="form-control me-2 w-50 border-primary" type="text" placeholder="Search" name="content" th:value="${content}">
             <select class="form-select me-2 w-25 border-primary" name="status">
                 <option value="0">状态</option>
-                <option value="1" th:selected="${status=='1'?'selected':''}">正常</option>
-                <option value="2" th:selected="${status=='2'?'selected':''}">删除</option>
-                <option value="3" th:selected="${status=='3'?'selected':''}">禁用</option>
+                <option value="1" id="opt1">正常</option>
+                <option value="2" id="opt2">删除</option>
+                <option value="3" id="opt3">禁用</option>
             </select>
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
@@ -40,9 +40,9 @@
         </tr>
         </thead>
         <tbody>
-            <tr th:each="comment:${page.dataList}">
+            <tr th:each="comment:${page.records}">
                 <th scope="row"><div class="form-check form-check-inline">
-                    <input class="form-check-input border-primary" type="checkbox" th:id="comment${comment.id}" th:value="${comment.id}">
+                    <input class="form-check-input border-primary" type="checkbox" th:id="comment+${comment.id}" th:value="${comment.id}">
                 </div></th>
                 <td th:text="${comment.rid}"></td>
                 <td th:text="${comment.mid}"></td>
@@ -52,8 +52,8 @@
                 <td class="statusTD" th:if="${comment.state==2}">删除</td>
                 <td class="statusTD" th:if="${comment.state==3}">禁用</td>
                 <td>
-                    <button th:id="ban${comment.id}" th:name="${comment.id}" th:class="btn btn-outline-danger ${comment.state==1?'':'d-none'}">禁用</button>
-                    <button th:id="del${comment.id}" th:name="${comment.id}" th:class="btn btn-outline-warning ${comment.state==1?'':'d-none'}">删除</button>
+                    <button th:id="ban+${comment.id}" th:name="${comment.id}" class="btn btn-outline-danger" th:classappend="${comment.state==1?'':'d-none'}">禁用</button>
+                    <button th:id="del+${comment.id}" th:name="${comment.id}" class="btn btn-outline-warning" th:classappend="${comment.state==1?'':'d-none'}">删除</button>
                 </td>
             </tr>
 
@@ -63,15 +63,15 @@
 
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
-        <li th:if="${requestScope.page.currentPage>1}" class="page-item"><a class="page-link" th:href="@{/res/img(content=${content},status=${status},id=${id})}">首页</a></li>
-        <li th:if="${requestScope.page.currentPage>1}" class="page-item"><a class="page-link" th:href="@{/res/img(cur=${page.currentPage}-1,content=${content},status=${status},id=${id})}">上一页</a></li>
+        <li th:if="${page.current>1}" class="page-item"><a class="page-link" th:href="@{/res/img(content=${content},status=${status},id=${id})}">首页</a></li>
+        <li th:if="${page.current>1}" class="page-item"><a class="page-link" th:href="@{/res/img(cur=${page.current}-1,content=${content},status=${status},id=${id})}">上一页</a></li>
 
-        <li th:each="i:${#numbers.sequence(${page.SPage},${page.EPage})}" th:class="page-item ${i==page.currentPage?'active':''}"><a class="page-link" th:href="@{/res/img(cur=${i},content=${content},status=${status},id=${id})}" th:text="${i}"></a></li>
+        <li th:each="i:${pageList}" class="page-item" th:classappend="${page.current==i?'active':''}"><a class="page-link" th:href="@{/res/img(cur=${i},content=${content},status=${status},id=${id})}" th:text="${i}"></a></li>
 
-        <li th:if="${page.currentPage<page.totalPages}" class="page-item"><a class="page-link" th:href="@{/res/img(cur=${page.currentPage+1},content=${content},status=${status},id=${id})}">下一页</a></li>
-        <li th:if="${page.currentPage<page.totalPages}" class="page-item"><a class="page-link" th:href="@{/res/img(cur=${page.totalPages},content=${content},status=${status},id=${id})}">尾页</a></li>
+        <li th:if="${page.current<page.pages}" class="page-item"><a class="page-link" th:href="@{/res/img(cur=${page.current}+1,content=${content},status=${status},id=${id})}">下一页</a></li>
+        <li th:if="${page.current<page.pages}" class="page-item"><a class="page-link" th:href="@{/res/img(cur=${page.pages},content=${content},status=${status},id=${id})}">尾页</a></li>
 
-        <li class="page-item"><a class="page-link" th:text="${page.currentPage}/${page.totalPages}"></a></li>
+        <li class="page-item"><a class="page-link"><span>[[${page.current}]]</span>/<span>[[${page.pages}]]</span></a></li>
     </ul>
 </nav>
 <!--toast-->
@@ -88,6 +88,17 @@
 </div>
 </body>
 <script>
+    $(function (){
+        let status="[[${status}]]"
+        if(status=='1'){
+            $("#opt1").prop("selected",true)
+        }else if(status=='2'){
+            $("#opt2").prop("selected",true)
+        }else if(status=='3'){
+            $("#opt3").prop("selected",true)
+        }
+    })
+
     $(function(){
         let text=$(".toast-body").text();
         if(text!=null&&text.length>0){
@@ -98,11 +109,11 @@
     })
     $(document).on("click","button[id^=ban]",function (){
         let id = $(this).prop("name");
-        window.location.href="${pageContext.request.contextPath}/res/img?act=banComment&id=${requestScope.id}&cid="+id;
+        window.location.href="/ex/res/banComment?id=[[${id}]]&cid="+id;
     })
     $(document).on("click","button[id^=del]",function (){
         let id = $(this).prop("name");
-        window.location.href="${pageContext.request.contextPath}/res/img?act=delComment&id=${requestScope.id}&cid="+id;
+        window.location.href="/ex/res/delComment?id=[[${id}]]&cid="+id;
     })
     $("#inlineCheckbox1").change(function (){
         let prop=$("#inlineCheckbox1").prop("checked")
