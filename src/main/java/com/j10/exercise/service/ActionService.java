@@ -1,16 +1,15 @@
 package com.j10.exercise.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.j10.exercise.bean.Manager;
+import com.j10.exercise.bean.Action;
 
 import java.util.List;
 
 /**
  * @author: Sylvia
  * @version: 1.0
- * @since: 2025/4/10 16:59
+ * @since: 2025/4/12 16:43
  */
-public interface ManagerService extends IService<Manager> {
-    Manager login(Manager manager);
-
+public interface ActionService extends IService<Action> {
+    List<Action> selectAction(Integer rid);
 }

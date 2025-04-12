@@ -33,9 +33,8 @@ public class Role extends Model<Role> {
         this.display = display;
     }
 
-    public Role(String rolename, String display, String createtime) {
+    public Role(String rolename, String display) {
         this.rolename = rolename;
         this.display = display;
-        this.createtime = createtime;
     }
 }

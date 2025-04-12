@@ -29,6 +29,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         if(b2){
             metaObject.setValue("favdate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         }
+        boolean b3=metaObject.hasSetter("createtime");
+        if(b3){
+            metaObject.setValue("createtime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        }
     }
 
     @Override

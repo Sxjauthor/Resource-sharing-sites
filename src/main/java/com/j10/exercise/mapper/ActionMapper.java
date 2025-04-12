@@ -10,11 +10,10 @@ import java.util.List;
 /**
  * @author: Sylvia
  * @version: 1.0
- * @since: 2025/4/10 17:15
+ * @since: 2025/4/12 15:35
  */
 @Mapper
 public interface ActionMapper extends BaseMapper<Action> {
-
-    @Select("select a.* from action a left join ra on a.id=ra.aid where ra.rid=#{value}")
+    @Select("select a.* from ra left join action a on ra.aid=a.id where rid=#{value}")
     List<Action> selectAction(Integer roleid);
 }

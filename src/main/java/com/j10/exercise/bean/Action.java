@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 @TableName("action")
-public class Action {
+public class Action extends Model<Action> {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String actionname;
@@ -29,5 +30,5 @@ public class Action {
 
     //指示当前角色是否有该能力
     @TableField(exist = false)
-    private boolean have;  //表中没有该字段
+    private String have;  //表中没有该字段
 }

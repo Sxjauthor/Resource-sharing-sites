@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.j10.exercise.mapper.RoleMapper">
+
+    <insert id="myInsert" parameterType="role">
+        <selectKey keyColumn="id" keyProperty="id" resultType="integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into role(rolename,display,createtime) values(#{rolename},#{display},#{createtime})
+    </insert>
+</mapper>

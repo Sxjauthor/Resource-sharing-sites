@@ -50,4 +50,5 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager> impl
             }
         }
     }
+
 }

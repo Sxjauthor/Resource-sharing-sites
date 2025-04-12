@@ -78,7 +78,7 @@ public class Login2Controller {
             }
             HttpSession session = req.getSession();
             session.setAttribute("manager",success);
-            return "redirect:/main.html";
+            return "redirect:/admin/main.html";
         }
     }
 }

@@ -1,15 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--引入公共head部分-->
+    <th:block th:include="~{common::commonHead}"></th:block>
     <title>新增角色</title>
-    <link href="${pageContext.request.contextPath}/img/favicon.ico" rel="icon" sizes="any" />
-    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet"/><!-- bt的样式 -->
-    <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script> <!-- bt的脚本 -->
-    <script src="${pageContext.request.contextPath}/js/jquery-3.7.1.min.js"></script><!-- jq的脚本[bt不需要,我们自己需要] -->
     <style>
         #nav{
             width:100%;
@@ -26,10 +20,10 @@
             </li>
         </ul>
     </div>
-    <%--    表单--%>
+<!--    表单-->
     <div class="card container-fluid mb-4" id="card">
-        <form id="sendForm" class="row g-3 card-body" method="post" action="${pageContext.request.contextPath}/role?act=roleAdd">
-            <input type="hidden" name="roleid" value="${requestScope.roleid}">
+        <form id="sendForm" class="row g-3 card-body" method="post" th:action="@{/role/roleAdd}">
+            <input type="hidden" name="roleid" th:value="${roleid}">
             <div class="col-6">
                 <label for="rolename" class="form-label" required>角色名</label>
                 <input type="text" class="form-control" id="rolename" name="rolename" placeholder="2-5位字母或数字组成,大写字母开头">
@@ -40,16 +34,14 @@
                 <input type="text" class="form-control" id="display" name="display">
             </div>
             <hr>
-            <c:forEach items="${requestScope.actions}" var="action">
-                <div class="col-4">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="action${action.id}" name="actions" value="${action.id}">
-                        <label class="form-check-label" for="action${action.id}">
-                                ${action.actionname}
-                        </label>
-                    </div>
+            <div th:each="action:${actions}" class="col-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" th:id="action+${action.id}" name="actions" th:value="${action.id}">
+                    <label class="form-check-label" th:for="action+${action.id}">
+                        [[${action.actionname}]]
+                    </label>
                 </div>
-            </c:forEach>
+            </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary" id="add">新增</button>
             </div>
@@ -65,9 +57,9 @@
         let val = $("#rolename").val();
         if(reg.test(val)){
             $.ajax({
-                url:'${pageContext.request.contextPath}/role',
+                url:'/ex/role/checkRoleName',
                 type:'post',
-                data:'act=checkRoleName&rolename='+val,
+                data:'rolename='+val,
                 dataType:'text',
                 success:function (b){
                     if(b=="true"){

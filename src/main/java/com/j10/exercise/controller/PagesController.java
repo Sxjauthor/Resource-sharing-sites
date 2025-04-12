@@ -2,7 +2,6 @@ package com.j10.exercise.controller;
 
 import com.j10.exercise.util.Constants;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.ServletContext;
@@ -36,16 +35,6 @@ public class PagesController {
     @RequestMapping("/register.html")
     public String register() {
         return "register";
-    }
-
-    @RequestMapping("/main.html")
-    public String main() {
-        return "main";
-    }
-
-    @RequestMapping("/default.html")
-    public String defaultPage() {
-        return "default";
     }
 
     @RequestMapping("/more.html")
@@ -86,6 +75,61 @@ public class PagesController {
     @RequestMapping("/search.html")
     public String search() {
         return "search";
+    }
+
+    @RequestMapping("/admin/main.html")
+    public String main() {
+        return "admin/main";
+    }
+
+    @RequestMapping("/admin/default.html")
+    public String defaultPage() {
+        return "admin/default";
+    }
+
+    @RequestMapping("/role")
+    public String role() {
+        return "admin/role";
+    }
+
+    @RequestMapping("/customer")
+    public String customer() {
+        return "admin/customer";
+    }
+
+    @RequestMapping("/res/img")
+    public String resImg() {
+        return "admin/r1List";
+    }
+
+    @RequestMapping("/res/soft")
+    public String resSoft() {
+        return "admin/r2List";
+    }
+
+    @RequestMapping("res/doc")
+    public String resDoc() {
+        return "admin/r3List";
+    }
+
+    @RequestMapping("/notice")
+    public String notice() {
+        return "admin/noticeManager";
+    }
+
+    @RequestMapping("/admin/roleadd.html")
+    public String roleAdd() {
+        return "admin/roleadd";
+    }
+
+    @RequestMapping("/admin/roleActionInfo.html")
+    public String roleActionInfo() {
+        return "admin/roleActionInfo";
+    }
+
+    @RequestMapping("/admin/ModifyManagerInfo.html")
+    public String ModifyManagerInfo() {
+        return "admin/ModifyManagerInfo";
     }
 
     @RequestMapping("/setlocale")

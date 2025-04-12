@@ -1,33 +1,24 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--引入公共head部分-->
+    <th:block th:include="~{common::commonHead}"></th:block>
     <title>管理员信息修改</title>
-    <link href="${pageContext.request.contextPath}/img/favicon.ico" rel="icon" sizes="any"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css"/>
-    <script src="${pageContext.request.contextPath}/js/jquery-3.7.1.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
-    <style>
-
-    </style>
 </head>
 <body>
 <div class="container-fluid">
     <div class="shadow p-3 mb-4 bg-body-tertiary rounded" id="nav">
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">管理员 - ${requestScope.manager.username}</a>
+                <a class="nav-link active" aria-current="page" href="#">管理员 - [[${manager.username}]]</a>
             </li>
         </ul>
     </div>
-    <%--    表单--%>
+<!--    表单-->
     <div class="card container-fluid mb-4" id="card">
         <form id="sendForm" class="row g-3 card-body" method="post"
-              action="${pageContext.request.contextPath}/role?act=updateManager">
-            <input type="hidden" name="id" value="${requestScope.manager.id}">
+              th:action="@{/role/updateManager}">
+            <input type="hidden" name="id" th:value="${manager.id}">
             <div class="col-6">
                 <label for="password" class="form-label">密码</label>
                 <input type="password" class="form-control" id="password" name="password">
@@ -54,16 +45,15 @@
 <script>
     $(function (){
         $.ajax({
-            url:'${pageContext.request.contextPath}/role',
+            url:'/ex/role/roleListJson',
             type:'post',
-            data:'act=roleListJson',
             dataType:'json',
             success:function (roleList){
                 for (let i = 0; i < roleList.length; i++) {
                     let role=roleList[i];
                     let $op=$("<option></option>")
                     $op.attr("value",role.id).text(role.rolename+" - "+role.display)
-                    if(role.id==${requestScope.manager.roleid}){
+                    if(role.id=="[[${manager.roleid}]]"){
                         $op.prop("selected",true)
                     }
                     $("#roleid").append($op)

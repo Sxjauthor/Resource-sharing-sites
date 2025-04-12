@@ -1,6 +1,7 @@
 package com.j10.exercise.bean;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 @TableName("manager")
-public class Manager {
+public class Manager extends Model<Manager> {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String username;
@@ -43,17 +44,15 @@ public class Manager {
         this.password = password;
     }
 
-    public Manager(String username, String password, Integer roleid, String createtime) {
+    public Manager(String username, String password, Integer roleid) {
         this.username = username;
         this.password = password;
         this.roleid = roleid;
-        this.createtime = createtime;
     }
 
-    public Manager(Integer id, String username, String createtime, String display) {
+    public Manager(Integer id, String username, String display) {
         this.id = id;
         this.username = username;
-        this.createtime = createtime;
         this.display = display;
     }
 }

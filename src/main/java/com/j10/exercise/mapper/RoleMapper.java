@@ -2,7 +2,10 @@ package com.j10.exercise.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.j10.exercise.bean.Role;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * @author: Sylvia
@@ -11,5 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {
+
+    void myInsert(Role role);
 
 }
