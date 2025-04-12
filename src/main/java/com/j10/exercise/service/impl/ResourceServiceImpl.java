@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.j10.exercise.bean.Favorite;
 import com.j10.exercise.bean.Member;
 import com.j10.exercise.bean.Resource;
+import com.j10.exercise.exception.CustomerException;
 import com.j10.exercise.mapper.ResourceMapper;
 import com.j10.exercise.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,5 +94,49 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
             queryWrapper.eq("mid", member.getId()).eq("rid", res.getId());
             favorite.delete(queryWrapper);
         }
+    }
+
+    @Override
+    public List<Resource> search(Resource r, String search) {
+        QueryWrapper<Resource> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("type",r.getType()).eq("status",1);
+        if(search!=null&&search.trim().length()>0){
+            queryWrapper.and(qw->{
+                qw.like("resname", search.charAt(0)).or().like("display", search.charAt(0));
+                for (int i = 1; i < search.length(); i++) {
+                    qw.or().like("resname", search.charAt(i)).or().like("display", search.charAt(i));
+                }
+            });
+        }
+        List<Resource> resourceList = resourceMapper.selectList(queryWrapper);
+        for (Resource resource : resourceList) {
+            resource.setJoindate(resource.getJoindate().substring(5,10));
+        }
+        return resourceList;
+    }
+
+    @Override
+    public boolean share(Resource r) {
+        Integer type = r.getType();
+        if(type.equals(11)){
+            r.setSub(1);
+            r.setType(1);
+        }else if(type.equals(12)){
+            r.setSub(2);
+            r.setType(1);
+        }else if(type.equals(13)){
+            r.setSub(3);
+            r.setType(1);
+        }else if(type.equals(14)){
+            r.setSub(4);
+            r.setType(1);
+        }else{
+            r.setSub(null);
+        }
+        if(!r.getType().equals(r.getContentType())){
+            throw new CustomerException("选择类型与上传类型不匹配",400);
+        }
+        int i = resourceMapper.insert(r);
+        return i>0;
     }
 }

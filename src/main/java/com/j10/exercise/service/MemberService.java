@@ -11,4 +11,5 @@ import com.j10.exercise.bean.Member;
 public interface MemberService extends IService<Member> {
     Member login(Member m);
 
+    Member sign(Member member);
 }

@@ -20,7 +20,7 @@
     <div class="border border-2 p-2 rounded shadow" style="width: 65%;">
         <div class="d-flex justify-content-between mb-2">
             <div><button class="btn btn-secondary disabled">热门壁纸</button></div>
-            <div><a class="text-muted btn btn-secondary" th:href="@{/resDetail(act='moreW')}">more</a></div>
+            <div><a class="text-muted btn btn-secondary" th:href="@{/resDetail/moreW}">more</a></div>
         </div>
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
@@ -116,7 +116,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body container">
-                <form id="shareForm" method="post" th:action="@{/resDetail(act=upload)}" enctype="multipart/form-data">
+                <form id="shareForm" method="post" th:action="@{/resDetail/upload}" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-7">
                             <label for="res" class="form-label">上传资源</label>
@@ -147,7 +147,7 @@
                         </div>
                         <div class="col-md-5">
                             <label for="gold" class="form-label">金币</label>
-                            <input type="text" class="form-control" id="gold" name="gold" value="0">
+                            <input type="text" class="form-control" id="gold" name="isFree" value="0">
                         </div>
                     </div>
                 </form>

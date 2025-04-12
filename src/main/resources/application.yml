@@ -9,6 +9,10 @@ spring:
     password: sjjqwe123...
   messages:
     basename: j10
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 10MB
 mybatis-plus:
   type-aliases-package: 'com.j10.exercise.bean'
   configuration:

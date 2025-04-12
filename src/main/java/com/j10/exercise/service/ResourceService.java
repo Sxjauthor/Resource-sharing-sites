@@ -25,4 +25,8 @@ public interface ResourceService extends IService<Resource> {
     Resource selectDetail(Resource res);
 
     void updateFav(Member member, Resource res, int i1);
+
+    List<Resource> search(Resource r, String search);
+
+    boolean share(Resource r);
 }

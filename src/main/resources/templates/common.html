@@ -34,11 +34,11 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" th:href="@{/index.html#wall}" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{Wallpaper}"></a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" th:href="@{/resDetail(act='search',type=1,search='风景')}" th:text="#{scenery}"></a></li>
-                        <li><a class="dropdown-item" th:href="@{/resDetail(act='search',type=1,search='美女')}" th:text="#{beauty}"></a></li>
+                        <li><a class="dropdown-item" th:href="@{/resDetail/search(type=1,search='风景')}" th:text="#{scenery}"></a></li>
+                        <li><a class="dropdown-item" th:href="@{/resDetail/search(type=1,search='美女')}" th:text="#{beauty}"></a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" th:href="@{/resDetail(act='search',type=1,search='设计')}" th:text="#{design}"></a></li>
-                        <li><a class="dropdown-item" th:href="@{/resDetail(act='search',type=1,search='军事')}" th:text="#{military}"></a></li>
+                        <li><a class="dropdown-item" th:href="@{/resDetail/search(type=1,search='设计')}" th:text="#{design}"></a></li>
+                        <li><a class="dropdown-item" th:href="@{/resDetail/search(type=1,search='军事')}" th:text="#{military}"></a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -52,8 +52,8 @@
                     </form>
                 </li>
             </ul>
-            <form class="d-flex me-auto" role="search" method="post" th:action="@{/resDetail(act='search')}">
-                <input class="form-control me-2" size="25" type="search" placeholder="Search" aria-label="Search" name="search" id="search">
+            <form class="d-flex me-auto" role="search" method="post" th:action="@{/resDetail/search}">
+                <input class="form-control me-2" size="25" type="search" placeholder="Search" aria-label="Search" name="search" id="search" th:value="${search}">
                 <button class="btn btn-success" type="submit" id="searchBtn" th:text="#{Search}"></button>
             </form>
             <!-- 登录/个人中心 2选1 -->
@@ -64,7 +64,7 @@
                      class="dropdown-toggle rounded" data-bs-toggle="dropdown" aria-expanded="false" width="40px"/>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><button class="dropdown-item" type="button" disabled>会员-[[${session.member.nick}]]</button></li>
-                    <li th:if="${session.member.signflag==0}"><a class="dropdown-item" type="button" th:href="@{/member(act='sign')}">签到</a></li>
+                    <li th:if="${session.member.signflag==0}"><a class="dropdown-item" type="button" th:href="@{/member/sign}">签到</a></li>
                     <li th:if="${session.member.signflag==1}"><a class="dropdown-item disabled" type="button">已签到</a></li>
                     <li><a class="dropdown-item disabled" type="button">金币:[[${session.member.gold}]]</a></li>
                     <li><button class="dropdown-item" type="button" id="personalInfoBtn">个人资料</button></li>
