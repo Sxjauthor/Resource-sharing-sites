@@ -197,12 +197,15 @@ public class ResourceController {
         for (int i = 0; i < favoriteList.size(); i++) {
             list.add(favoriteList.get(i).getRid());
         }
-        QueryWrapper<Resource> queryWrapper2=new QueryWrapper<>();
-        queryWrapper2.eq("type", Integer.parseInt(type)).eq("status",1).in("id",list);
-        List<Resource> resources = resourceService.list(queryWrapper2);
-        if(resources!=null&&resources.size()>0){
-            for (Resource resource : resources) {
-                resource.setJoindate(resource.getJoindate().substring(5,10));
+        List<Resource> resources =null;
+        if(list.size()>0){
+            QueryWrapper<Resource> queryWrapper2=new QueryWrapper<>();
+            queryWrapper2.eq("type", Integer.parseInt(type)).eq("status",1).in("id",list);
+            resources = resourceService.list(queryWrapper2);
+            if(resources!=null&&resources.size()>0){
+                for (Resource resource : resources) {
+                    resource.setJoindate(resource.getJoindate().substring(5,10));
+                }
             }
         }
         req.setAttribute("list",resources);

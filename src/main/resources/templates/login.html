@@ -116,10 +116,22 @@
             <small>刚刚</small>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-        <div class="toast-body" th:if="${msg!=null || t!=null}">[[${msg}]][[${t==0?'已安全退出':''}]][[${t==1?'注册成功,请登录':''}]][[${t==2?'修改成功,请重新登录':''}]][[${t==3?'请先登录':''}]]</div>
+        <div class="toast-body" th:if="${msg}" th:text="${msg}"></div>
+        <div class="toast-body" th:if="${t==0}">已安全退出</div>
+        <div class="toast-body" th:if="${t==1}">注册成功,请登录</div>
+        <div class="toast-body" th:if="${t==2}">修改成功,请重新登录</div>
+        <div class="toast-body" id="t3"></div>
     </div>
 </div>
 <script>
+    $(function (){
+        let url = window.location.search.substring(1);
+        let t = url.substring(url.length-1,url.length);
+        console.log("t=>"+t)
+        if(t==3){
+            $("#t3").text("无权访问,请先登录");
+        }
+    })
     $(function(){
         let text=$(".toast-body").text();
         if(text!=null&&text.length>0){

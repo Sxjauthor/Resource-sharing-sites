@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class PagesController {
 
-    @RequestMapping(path = {"/","login.html"})
+    @RequestMapping("login.html")
     public String login() {
         return "login";
     }

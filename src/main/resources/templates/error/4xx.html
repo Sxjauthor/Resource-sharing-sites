@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="~{common::commonHead}"></th:block>
+    <title>404 Page</title>
+    <style>
+        body {
+            background-image: url("/ex/img/lockscreen-bg.jpg");
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* 使用视口高度 */
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%; /* 确保容器占满整个视口 */
+        }
+        .error-card {
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="error-container">
+        <div class="error-card">
+            <section class="error-wrapper text-center">
+                <h1><img alt="" th:src="@{/img/404-error.png}"></h1>
+                <h2>Sorry~ 页面还未开发</h2>
+                <h3>We Couldn’t Find This Page</h3>
+                <a class="back-btn" href="javascript:window.history.back()">Back</a>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+</html>

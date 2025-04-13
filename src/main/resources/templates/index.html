@@ -175,6 +175,15 @@
     </div>
 </div>
 <script>
+    $(function(){
+        let text=$(".toast-body").text();
+        if(text!=null&&text.length>0){
+            let toastLiveExample = document.getElementById('liveToast')
+            let toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        }
+    })
+
     $("#shareBtn").click(function (){
         $("#shareForm").submit();
     })
@@ -248,16 +257,6 @@
             e.preventDefault();
         }
     })
-
-    $(function(){
-        let text=$(".toast-body").text();
-        if(text!=null&&text.length>0){
-            let toastLiveExample = document.getElementById('liveToast')
-            let toast = new bootstrap.Toast(toastLiveExample)
-            toast.show()
-        }
-    })
-
 
     $(function (){
         $.ajax({
@@ -516,6 +515,8 @@
             }
         })
     })
+</script>
+<script th:if="${session.member!=null}">
     $(document).on("click","a[id^=get]",function (e){
         let gold =Number("[[${session.member.gold}]]") ;
         console.log("gold=="+gold)
