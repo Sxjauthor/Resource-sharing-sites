@@ -3,6 +3,8 @@ package com.j10.exercise.controller;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.j10.exercise.bean.Member;
 import com.j10.exercise.service.MemberService;
 import com.j10.exercise.util.Constants;
@@ -11,6 +13,7 @@ import com.sun.jersey.api.client.WebResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author: Sylvia
@@ -132,6 +136,52 @@ public class MemberController {
             model.addAttribute("t",2);
             return "info";
         }
+    }
+
+    @RequestMapping("/customer")
+    public String customer(String cur,String username,String status,Model model){
+        QueryWrapper<Member> queryWrapper = new QueryWrapper<>();
+        Page<Member> page=new Page<>();
+        if(cur!=null){
+            page.setCurrent(Integer.parseInt(cur));
+        }
+        page.setSize(7);
+        if(status==null){
+            status="0";
+        }
+        queryWrapper.eq(!status.equals("0"),"status",status).and(StringUtils.hasText(username), qw->{
+            qw.like("username",username).or().like("nick",username);
+        });
+        page = memberService.page(page, queryWrapper);
+        List<Long> pageList=new ArrayList<>();
+        for (long i = page.getCurrent()-2; i < page.getCurrent()+2; i++) {
+            if(i>=1&&i<=page.getPages()){
+                pageList.add(i);
+            }
+        }
+        model.addAttribute("username",username);
+        model.addAttribute("status",status);
+        model.addAttribute("page",page);
+        model.addAttribute("pageList",pageList);
+        return "admin/customerList";
+    }
+
+    @RequestMapping("/customer/ban")
+    public String ban(String id,Model model){
+        UpdateWrapper<Member> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.eq("id",Integer.parseInt(id)).set("status",3);
+        memberService.update(updateWrapper);
+        model.addAttribute("msg","禁用成功");
+        return "forward:/customer";
+    }
+
+    @RequestMapping("/customer/recover")
+    public String recover(String id,Model model){
+        UpdateWrapper<Member> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.eq("id",Integer.parseInt(id)).set("status",1);
+        memberService.update(updateWrapper);
+        model.addAttribute("msg","恢复成功");
+        return "forward:/customer";
     }
 
 }

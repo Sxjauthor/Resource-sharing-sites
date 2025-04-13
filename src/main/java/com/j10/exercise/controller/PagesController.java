@@ -57,14 +57,9 @@ public class PagesController {
         return "admin/role";
     }
 
-    @RequestMapping("/customer")
-    public String customer() {
-        return "admin/customer";
-    }
-
-    @RequestMapping("/notice")
-    public String notice() {
-        return "admin/noticeManager";
+    @RequestMapping("/admin/noticeadd.html")
+    public String noticeAdd() {
+        return "admin/noticeadd";
     }
 
     @RequestMapping("/setlocale")

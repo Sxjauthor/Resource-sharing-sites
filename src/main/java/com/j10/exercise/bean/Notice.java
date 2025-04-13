@@ -40,15 +40,9 @@ public class Notice extends Model<Notice> {
     @TableField(exist = false)
     private String cusername; //创建者用户名
 
-    public Notice(Integer id, String publishtime) {
-        this.id = id;
-        this.publishtime = publishtime;
-    }
-
-    public Notice(String title, String content, String createtime, Integer creater) {
+    public Notice(String title, String content, Integer creater) {
         this.title = title;
         this.content = content;
-        this.createtime = createtime;
         this.creater = creater;
     }
 }

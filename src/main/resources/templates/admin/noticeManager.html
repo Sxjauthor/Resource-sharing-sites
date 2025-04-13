@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--引入公共head部分-->
+    <th:block th:include="~{common::commonHead}"></th:block>
+    <title>公告管理</title>
+</head>
+<body class="bg-primary-subtle">
+<div class="container-fluid">
+    <button class="btn btn-secondary disabled mb-3">公告管理</button>
+    <div class="row py-2">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <form class="d-flex flex-grow-1" method="post" th:action="@{/notice}">
+                <input class="form-control me-2 w-50 border-primary" type="search" placeholder="Search" name="title" th:value="${title}">
+                <select class="form-select me-2 w-25 border-primary" name="status">
+                    <option value="0">状态</option>
+                    <option value="1" id="opt1">未发布</option>
+                    <option value="2" id="opt2">发布</option>
+                    <option value="3" id="opt3">下架</option>
+                </select>
+                <input type="date" name="start" class="form-control me-2 w-25 border-primary" th:value="${start}">
+                <span class="me-2 mt-2">-</span>
+                <input type="date" name="end" class="form-control me-2 w-25 border-primary" th:value="${end}">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            <div class="d-flex">
+                <a class="btn btn-primary ms-2" th:href="@{/admin/noticeadd.html}">新增公告</a>
+                <a id="del" class="btn btn-danger ms-2" href="">批量下架</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="p-2">
+    <table class="table table-hover table-bordered border-primary">
+        <thead>
+        <tr>
+            <th scope="col"><div class="form-check form-check-inline">
+                <input class="form-check-input border-primary" type="checkbox" id="inlineCheckbox1" value="option1">
+                <label class="form-check-label" for="inlineCheckbox1">全选</label>
+            </div>
+            <th scope="col">标题</th>
+            <th scope="col">作者</th>
+            <th scope="col">创建时间</th>
+            <th scope="col">发布时间</th>
+            <th scope="col">状态</th>
+            <th scope="col">阅读量</th>
+            <th scope="col">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="notice:${page.records}">
+            <th scope="row"><div class="form-check form-check-inline">
+                <input class="form-check-input border-primary" type="checkbox" th:id="notice+${notice.id}" th:value="${notice.id}">
+            </div></th>
+            <td>[[${notice.title}]]</td>
+            <td>[[${notice.cusername}]]</td>
+            <td>[[${notice.createtime}]]</td>
+            <td>[[${notice.publishtime}]]</td>
+            <td>[[${notice.status==1?'未发布':''}]][[${notice.status==2?'发布':''}]][[${notice.status==3?'下架':''}]]</td>
+            <td>[[${notice.look}]]</td>
+            <td>
+                <a th:if="${notice.status==1&&(notice.creater==session.manager.id||session.manager.id==1)}" class="btn btn-outline-success btn-sm" th:href="@{/notice/opt(status=2,id=${notice.id})}">发布</a>
+                <a th:if="${notice.status==1&&(notice.creater==session.manager.id||session.manager.id==1)}" class="btn btn-outline-primary btn-sm" th:href="@{/notice/modify(id=${notice.id})}">修改</a>
+                <a th:if="${notice.status==2&&(notice.creater==session.manager.id||session.manager.id==1)}" class="btn btn-outline-warning btn-sm" th:href="@{/notice/opt(status=3,id=${notice.id})}">下架</a>
+                <a th:if="${notice.status==2}" class="btn btn-outline-dark btn-sm" th:href="@{/notice/detailM(id=${notice.id})}">查看</a>
+                <a th:if="${notice.status==3}" class="btn btn-outline-dark btn-sm" th:href="@{/notice/detailM(id=${notice.id})}">查看</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li th:if="${page.current>1}" class="page-item"><a class="page-link" th:href="@{/notice(title=${title},status=${status},start=${start},end=${end})}">首页</a></li>
+        <li th:if="${page.current>1}" class="page-item"><a class="page-link" th:href="@{/notice(curpage=${page.current}-1,title=${title},status=${status},start=${start},end=${end})}">上一页</a></li>
+        <li th:each="i:${pageList}" class="page-item" th:classappend="${page.current==i?'active':''}"><a class="page-link" th:href="@{/notice(curpage=${i},title=${title},status=${status},start=${start},end=${end})}">[[${i}]]</a></li>
+        <li th:if="${page.current<page.pages}" class="page-item"><a class="page-link" th:href="@{/notice(curpage=${page.current+1},title=${title},status=${status},start=${start},end=${end})}">下一页</a></li>
+        <li th:if="${page.current<page.pages}" class="page-item"><a class="page-link" th:href="@{/notice(curpage=${page.pages},title=${title},status=${status},start=${start},end=${end})}">尾页</a></li>
+
+        <li class="page-item"><a class="page-link"><span>[[${page.current}]]</span>/<span>[[${page.pages}]]</span></a></li>
+    </ul>
+</nav>
+
+<!--toast-->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img th:src="@{/img/favicon.ico}" width="20px" class="rounded me-2" alt="...">
+            <strong class="me-auto">公告管理</strong>
+            <small>刚刚</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">[[${msg}]]</div>
+    </div>
+</div>
+</body>
+<script>
+    $(function (){
+        let status="[[${status}]]"
+        if(status=='1'){
+            $("#opt1").prop("selected",true)
+        }else if(status=='2'){
+            $("#opt2").prop("selected",true)
+        }else if(status=='3'){
+            $("#opt3").prop("selected",true)
+        }
+    })
+
+    $(function (){
+        let msg=$(".toast-body").text()
+        if(msg!=null&&msg.length>0){
+            let toastLiveExample = document.getElementById("liveToast");
+            let toast = new bootstrap.Toast(toastLiveExample);
+            toast.show()
+        }
+    })
+
+    $("#inlineCheckbox1").change(function (){
+        let prop=$("#inlineCheckbox1").prop("checked")
+        if(prop){
+            let $checkbox = $(":checkbox[id^=notice]");
+            $checkbox.each(function (){
+                $(this).prop("checked",true);
+            })
+        }else{
+            let $checkbox = $(":checkbox[id^=notice]");
+            $checkbox.each(function (){
+                $(this).prop("checked",false);
+            })
+        }
+    })
+
+    $("#del").click(function (){
+        let $check = $(":checkbox[id^=notice]:checked");
+        if($check.length>0){
+            let list=[];
+            $check.each(function (){
+                let val = $(this).val();
+                list.push(val)
+            })
+            console.log(list)
+            let href="/ex/notice/delete?list="+list;
+            $("#del").prop("href",href);
+        }else{
+            e.preventDefault();
+        }
+    })
+</script>
+</html>
