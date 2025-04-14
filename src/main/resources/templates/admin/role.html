@@ -275,6 +275,7 @@
             type:'post',
             dataType:'json',
             success:function (managerList){
+                console.log(managerList)
                 for (let i = 0; i < managerList.length; i++) {
                     let manager=managerList[i];
                     let id=manager.id;

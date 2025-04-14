@@ -8,6 +8,7 @@ import com.j10.exercise.interceptor.ManagerInterceptor;
 import com.j10.exercise.interceptor.MemberInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -31,5 +32,12 @@ public class MyConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new MemberInterceptor()).addPathPatterns("/noticeMem/**","/resDetail/**");
         registry.addInterceptor(new ManagerInterceptor()).addPathPatterns("/admin/**","/role/**","/customer/**","/sort/**","/res/**","/notice/**");
+    }
+
+    @Bean
+    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+        HiddenHttpMethodFilter hiddenHttpMethodFilter = new HiddenHttpMethodFilter();
+        hiddenHttpMethodFilter.setMethodParam("mym");
+        return hiddenHttpMethodFilter;
     }
 }

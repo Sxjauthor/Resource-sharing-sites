@@ -20,7 +20,7 @@ public class MemberInterceptor implements HandlerInterceptor {
         }else{
             resp.sendRedirect(req.getContextPath()+"/login.html?t=3");
         }
-        log.info("被MemberInterceptor拦截-------------------");
+        log.info("被MemberInterceptor拦截");
         return false;
     }
 }

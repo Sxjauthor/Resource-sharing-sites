@@ -22,8 +22,9 @@
     </div>
 <!--    表单-->
     <div class="card container-fluid mb-4" id="card">
-        <form id="sendForm" class="row g-3 card-body" method="post" th:action="@{/role/roleAdd}">
+        <form id="sendForm" class="row g-3 card-body" method="post" th:action="@{/role/updateRole}">
             <input type="hidden" name="roleid" th:value="${roleid}">
+            <input type="hidden" name="mym" value="PUT">
             <div class="col-6">
                 <label for="rolename" class="form-label" required>角色名</label>
                 <input type="text" class="form-control" id="rolename" name="rolename" placeholder="2-5位字母或数字组成,大写字母开头">

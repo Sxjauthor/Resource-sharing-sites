@@ -13,7 +13,33 @@ spring:
     multipart:
       max-request-size: 100MB
       max-file-size: 10MB
+  redis:
+    port: 6379
+    host: localhost
+#  profiles:
+#    active: prod
 mybatis-plus:
   type-aliases-package: 'com.j10.exercise.bean'
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+server:
+  port: 8081
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+server:
+  port: 8082
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+server:
+  port: 8083

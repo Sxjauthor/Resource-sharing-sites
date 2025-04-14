@@ -20,7 +20,7 @@ public class ManagerInterceptor implements HandlerInterceptor {
         }else{
             resp.sendRedirect(req.getContextPath()+"/login.html?t=3");
         }
-        log.info("被ManagerInterceptor拦截-------------------");
+        log.info("被ManagerInterceptor拦截");
         return false;
     }
 }

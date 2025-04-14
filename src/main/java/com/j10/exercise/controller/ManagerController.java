@@ -2,16 +2,21 @@ package com.j10.exercise.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.j10.exercise.bean.Manager;
 import com.j10.exercise.bean.Role;
 import com.j10.exercise.service.ManagerService;
 import com.j10.exercise.service.RoleService;
+import com.j10.exercise.config.RedisUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,16 +27,25 @@ import java.util.List;
  * @version: 1.0
  * @since: 2025/4/12 17:37
  */
+@Slf4j
 @Controller
 public class ManagerController {
     @Autowired
     private ManagerService managerService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private RedisUtil redisUtil;
 
     @RequestMapping("/role/managerlist")
     @ResponseBody
-    public List<Manager> managerlist() {
+    public String managerlist() throws JsonProcessingException {
+        String redislist = (String) redisUtil.get("managerlist");
+        if(StringUtils.hasText(redislist)){
+            log.info("managerlist命中缓存");
+            return redislist;
+        }
+        log.info("managerlist未命中缓存,查询数据库");
         List<Manager> managerList=managerService.list();
         for (int i = 0; i < managerList.size(); i++) {
             Manager manager = managerList.get(i);
@@ -42,7 +56,10 @@ public class ManagerController {
                 manager.setDisplay(role.getDisplay());
             }
         }
-        return managerList;
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(managerList);
+        redisUtil.set("managerlist",json,20);
+        return json;
     }
 
     @RequestMapping("/role/checkName")
@@ -68,7 +85,15 @@ public class ManagerController {
     @RequestMapping("/role/updateManager")
     public String updateManager(Manager manager, Model model) {
         UpdateWrapper<Manager> updateWrapper=new UpdateWrapper<>();
-        updateWrapper.eq("id",manager.getId()).set(StringUtils.hasText(manager.getPassword()),"password",manager.getPassword()).set("roleid",manager.getRoleid());
+        boolean b=manager.getPassword().trim().length()>0;
+        updateWrapper.eq("id",manager.getId()).set(b,"password",manager.getPassword()).set("roleid",manager.getRoleid());
+        //版本号
+        Manager m = managerService.getById(manager.getId());
+        Manager m1=new Manager();
+        if(StringUtils.hasText(manager.getPassword())||!manager.getRoleid().equals(m.getRoleid())){
+            m1.setVersion(m.getVersion());
+        }
+        managerService.update(m1,updateWrapper);
         model.addAttribute("msg","修改管理员信息成功");
         return "admin/role";
     }

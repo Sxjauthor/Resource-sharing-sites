@@ -29,6 +29,11 @@ public class Manager extends Model<Manager> {
     private Integer roleid;
     @TableField(fill = FieldFill.INSERT)
     private String createtime;
+    @Version
+    private int version; //版本号(实现乐观锁)
+    @TableLogic(value = "0",delval = "1")
+    @TableField(select = false)
+    private Integer deleted; //逻辑删除字段 0未删除 1删除
 
     //非manager表里的信息
     @TableField(exist = false)

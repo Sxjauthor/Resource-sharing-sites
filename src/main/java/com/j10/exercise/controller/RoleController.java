@@ -10,8 +10,7 @@ import com.j10.exercise.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -45,21 +44,6 @@ public class RoleController {
         return "admin/roleadd";
     }
 
-    @RequestMapping("/role/roleAdd")
-    public String roleAdd(String rolename,String display,String[] actions,Model model) {
-        //新增角色
-        Role role=new Role(rolename,display);
-        ArrayList<Integer> aids= new ArrayList<>();
-        for (int i = 0; i < actions.length; i++) {
-            aids.add(Integer.parseInt(actions[i]));
-        }
-        roleService.addRole(role,aids);
-        model.addAttribute("msg","新增角色成功");
-        List<Role> roleList=roleService.list();
-        model.addAttribute("roleList",roleList);
-        return "admin/role";
-    }
-
     @RequestMapping("/role/checkRoleName")
     public void checkRoleName(String rolename, HttpServletResponse resp) throws IOException {
         QueryWrapper<Role> queryWrapper=new QueryWrapper<>();
@@ -78,8 +62,23 @@ public class RoleController {
         return "admin/roleActionInfo";
     }
 
-    @RequestMapping("/role/updateRole")
-    public String updateRole(String roleid,String rolename,String display,String[] actions,Model model) {
+    @PutMapping("/role/updateRole")
+    public String roleAdd(String rolename,String display,String[] actions,Model model) {
+        //新增角色
+        Role role=new Role(rolename,display);
+        ArrayList<Integer> aids= new ArrayList<>();
+        for (int i = 0; i < actions.length; i++) {
+            aids.add(Integer.parseInt(actions[i]));
+        }
+        roleService.addRole(role,aids);
+        model.addAttribute("msg","新增角色成功");
+        List<Role> roleList=roleService.list();
+        model.addAttribute("roleList",roleList);
+        return "admin/role";
+    }
+
+    @PostMapping("/role/updateRole")
+    public String updateRole(String roleid, String rolename, String display, String[] actions, Model model) {
         Role role=new Role(Integer.parseInt(roleid),rolename,display);
         List<Integer> aids =new ArrayList<>();
         for (String action : actions) {
