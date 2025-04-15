@@ -29,6 +29,7 @@ public class Manager extends Model<Manager> {
     private Integer roleid;
     @TableField(fill = FieldFill.INSERT)
     private String createtime;
+    @TableField(fill = FieldFill.UPDATE)
     @Version
     private int version; //版本号(实现乐观锁)
     @TableLogic(value = "0",delval = "1")

@@ -9,6 +9,7 @@ import com.j10.exercise.bean.Role;
 import com.j10.exercise.service.ManagerService;
 import com.j10.exercise.service.RoleService;
 import com.j10.exercise.config.RedisUtil;
+import com.j10.exercise.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -71,6 +72,14 @@ public class ManagerController {
         resp.getWriter().write(String.valueOf(!b));
     }
 
+    @RequestMapping("/role/addManager")
+    public String addManager(String username,String roleid,Model model) {
+        Manager manager=new Manager(username, Constants.DEFAULT_PASSWORD,Integer.parseInt(roleid));
+        manager.insert();
+        model.addAttribute("msg","新增管理员成功");
+        return "admin/role";
+    }
+
     @RequestMapping("/role/modifyM")
     public String modifyM(Manager manager, Model model) {
         if(manager.getRoleid()==null){
@@ -85,15 +94,16 @@ public class ManagerController {
     @RequestMapping("/role/updateManager")
     public String updateManager(Manager manager, Model model) {
         UpdateWrapper<Manager> updateWrapper=new UpdateWrapper<>();
-        boolean b=manager.getPassword().trim().length()>0;
-        updateWrapper.eq("id",manager.getId()).set(b,"password",manager.getPassword()).set("roleid",manager.getRoleid());
-        //版本号
+        boolean b1=manager.getPassword().trim().length()>0;
+        boolean b2=false;
         Manager m = managerService.getById(manager.getId());
-        Manager m1=new Manager();
-        if(StringUtils.hasText(manager.getPassword())||!manager.getRoleid().equals(m.getRoleid())){
-            m1.setVersion(m.getVersion());
+        if(!manager.getRoleid().equals(m.getRoleid())){
+            b2=true;
         }
-        managerService.update(m1,updateWrapper);
+        Manager m1=new Manager();
+        m1.setVersion(m.getVersion());
+        updateWrapper.eq("id",manager.getId()).set(b1,"password",manager.getPassword()).set(b2,"roleid",manager.getRoleid());
+        m1.update(updateWrapper);
         model.addAttribute("msg","修改管理员信息成功");
         return "admin/role";
     }

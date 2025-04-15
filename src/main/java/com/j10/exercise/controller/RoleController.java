@@ -120,14 +120,6 @@ public class RoleController {
         return "admin/role";
     }
 
-    @RequestMapping("/role/addManager")
-    public String addManager(String username,String roleid,Model model) {
-        Manager manager=new Manager(username, Constants.DEFAULT_PASSWORD,Integer.parseInt(roleid));
-        manager.insert();
-        model.addAttribute("msg","新增管理员成功");
-        return "admin/role";
-    }
-
     @RequestMapping("/role/roleListJson")
     @ResponseBody
     public List<Role> roleListJson() {

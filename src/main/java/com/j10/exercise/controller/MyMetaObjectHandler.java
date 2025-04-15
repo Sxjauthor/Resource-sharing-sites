@@ -37,6 +37,12 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-
+        System.out.println("-----------------------------------进入-------------------------------");
+        boolean b4=metaObject.hasSetter("version");
+        System.out.println("-----------------------------------"+b4+"-------------------------------");
+        if(b4){
+            Integer version = (Integer) metaObject.getValue("version");
+            metaObject.setValue("version", version+1);
+        }
     }
 }

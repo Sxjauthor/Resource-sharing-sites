@@ -92,7 +92,7 @@ public class ResourceController {
     }
 
     @RequestMapping("/resDetail/download")
-    public void downloadS(String id,String type, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void download(String id,String type, HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Resource r=new Resource();
         r.setId(Integer.parseInt(id));
         Resource res = resourceService.selectDetail(r);
